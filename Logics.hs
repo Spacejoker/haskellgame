@@ -16,16 +16,28 @@ nextPlayerPos player dt
   | otherwise = playerPos player
     where x0 = xVal $ playerPos player
           y0 = yVal $ playerPos player
-          slowSpeed = 0.14
+          slowSpeed = 0.2
 
 updatePlayer :: Player -> Word32 -> Word32 ->  Player
 updatePlayer player t dt = player { animation = animation', playerPos = playerPos' }
   where animation' = (head  (updateAnimations  [animation player] t)) { animPos = playerPos player}
         playerPos' = nextPlayerPos player dt
 
+posDiff :: Float -> Float -> Float -> Float -> Float
+posDiff minval maxval a b
+  | (b-a) < minval = b - minval
+  | (b-a) > maxval = b - maxval
+  | otherwise = a
+
+updateCamera :: Position -> Position -> Position
+updateCamera cameraPos playerPos = Position (min (32*35-800)  (max 0 xpos)) (min (32*35-600) (max 0 ypos))
+  where xpos = posDiff 200 600 (xVal cameraPos) (xVal playerPos)
+        ypos = posDiff 200 400 (yVal cameraPos) (yVal playerPos)
+
 --update both logics and graphics, in that order
 updateGamestate :: GameState -> Word32 -> Word32 -> GameState
-updateGamestate gs t dt = gs { animations = animations', player = player' }
+updateGamestate gs t dt = gs { animations = animations', player = player', cameraPos = cameraPos' }
   where animations' = updateAnimations (animations gs) t
         player' = updatePlayer (player gs) t dt
+        cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs)
 
