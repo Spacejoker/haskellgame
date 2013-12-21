@@ -14,6 +14,9 @@ data Position = Position {
   yVal :: Float
 }
 
+data Mode = Walking | Fight
+  deriving Eq
+
 data GameState = GameState{
   gameActive :: Bool,
   animations :: [Animation],
@@ -21,7 +24,8 @@ data GameState = GameState{
   player :: Player,
   currentMap :: TiledMap,
   tileSurface :: Surface,
-  cameraPos :: Position
+  cameraPos :: Position,
+  gameMode :: Mode
 }
 
 data Animation = Animation {

@@ -31,7 +31,7 @@ main = do
   t0 <- getTicks 
 
   let player = Player Down Stop (Position 300 300) (Animation sheet 26 4 250 t0 0 (Position 0 0))
-  gameLoop (GameState True [] t0 player tiledMap tileSurface (Position 32 32)) t0
+  gameLoop (GameState True [] t0 player tiledMap tileSurface (Position 32 32) Model.Walking) t0
 
 gameLoop :: GameState -> Word32 -> IO ()
 gameLoop gs lastTick = do

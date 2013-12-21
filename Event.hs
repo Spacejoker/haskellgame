@@ -27,5 +27,4 @@ handleEvent x gs =
       where player' = (player gs){ moveDirection = Model.Up, speed = Model.Slow }
     KeyDown (Keysym SDLK_DOWN _ _) -> gs {player = player'}
       where player' = (player gs){ moveDirection = Model.Down, speed = Model.Slow }
-    _ -> gs {player = player'}
-      where player' = (player gs){ speed = Model.Stop }
+    _ -> gs
