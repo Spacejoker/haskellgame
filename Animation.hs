@@ -27,10 +27,11 @@ blitAnimations (x:xs) s = do
   blitAnimations xs s
 
 nextFrame :: Animation -> Word32 -> Animation
-nextFrame x t = x {lastSwitchTime = t, currentImage = ((currentImage x)+1) `mod` frameCount x}
+nextFrame x t = x {lastSwitchTime = (fromIntegral t), currentImage = ((currentImage x)+1) `mod` frameCount x}
 
 updateAnimations :: [Animation] -> Word32 -> [Animation]
 updateAnimations [] _ = []
 updateAnimations (x:xs) t
-  | t - (lastSwitchTime x) > fromIntegral (imageTime x) = ( nextFrame x t : updateAnimations xs t)
+  | t - (lastSwitchTime x) > (fromIntegral $ imageTime x)  = ( nextFrame x t : updateAnimations xs t)
   | otherwise = (x : updateAnimations xs t)
+

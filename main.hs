@@ -36,16 +36,16 @@ nextPlayerPos player dt
           y0 = yVal $ playerPos player
           slowSpeed = 0.14
 
-updatePlayer :: Player -> Word32 ->  Player
-updatePlayer player t = player { animation = animation', playerPos = playerPos' }
+updatePlayer :: Player -> Word32 -> Word32 ->  Player
+updatePlayer player t dt = player { animation = animation', playerPos = playerPos' }
   where animation' = (head  (updateAnimations  [animation player] t)) { animPos = playerPos player}
-        playerPos' = nextPlayerPos player t
+        playerPos' = nextPlayerPos player dt
 
 --update both logics and graphics, in that order
-updateGamestate :: GameState -> Word32 -> GameState
-updateGamestate gs dt = gs { animations = animations', player = player' }
-  where animations' = updateAnimations (animations gs) dt
-        player' = updatePlayer (player gs) dt
+updateGamestate :: GameState -> Word32 -> Word32 -> GameState
+updateGamestate gs t dt = gs { animations = animations', player = player' }
+  where animations' = updateAnimations (animations gs) t
+        player' = updatePlayer (player gs) t dt
 
 gameLoop :: Surface -> GameState -> Word32 -> IO ()
 gameLoop image gs lastTick = do
@@ -53,7 +53,7 @@ gameLoop image gs lastTick = do
   events <- getEvents pollEvent []
   let gs' = handleEvents events gs
   t <- getTicks
-  let gs'' = updateGamestate gs' (t - lastTick)
+  let gs'' = updateGamestate gs' t (t - lastTick)
   drawGamestate gs''
 
   if gameActive gs''
