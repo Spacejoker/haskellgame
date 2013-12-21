@@ -1,0 +1,2 @@
+fx when starting battles
+make the fights work in some way, give 1 xp for killing 1 enemy. Get some GUI up and running, just basic stuff
