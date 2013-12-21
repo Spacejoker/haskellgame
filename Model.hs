@@ -5,6 +5,8 @@ import Graphics.UI.SDL as SDL
 import Data.Word
 import Data.Tiled
 
+import System.Random
+
 data Direction = None | Up | Down | Left | Right
   deriving Eq
 data Speed = Stop | Slow | Fast
@@ -14,8 +16,13 @@ data Position = Position {
   yVal :: Float
 }
 
-data Mode = Walking | Fight
-  deriving Eq
+data Mode = Walking | Fight | AfterFight
+  deriving (Eq, Show)
+
+data Graphics = Graphics {
+  tileSurface :: Surface,
+  fightbg :: Surface
+}
 
 data GameState = GameState{
   gameActive :: Bool,
@@ -23,9 +30,11 @@ data GameState = GameState{
   time :: Word32,
   player :: Player,
   currentMap :: TiledMap,
-  tileSurface :: Surface,
   cameraPos :: Position,
-  gameMode :: Mode
+  gameMode :: Mode,
+  rng :: StdGen,
+  nextFight :: Int,
+  gx :: Graphics
 }
 
 data Animation = Animation {

@@ -39,12 +39,24 @@ drawMap m s tileSurface cameraPos = do
   drawTiles coords tileData s tileSurface cameraPos
   return ()
 
-drawGamestate :: GameState -> IO ()
-drawGamestate gs = do
+drawWalkingMode :: GameState -> IO ()
+drawWalkingMode gs = do
   s <- getVideoSurface
-  drawMap (currentMap gs) s (tileSurface gs) (cameraPos gs)
+  drawMap (currentMap gs) s (tileSurface $ gx gs) (cameraPos gs)
   blitAnimations ((animation (player gs)) : animations gs) s (cameraPos gs)
   SDL.flip s
+
+drawFight :: GameState -> IO ()
+drawFight gs = do
+  s <- getVideoSurface
+  blitSurface (fightbg $ gx gs) Nothing s Nothing
+  
+  SDL.flip s
+
+drawGamestate :: GameState -> IO ()
+drawGamestate gs
+  | gameMode gs == Model.Walking = drawWalkingMode gs
+  | gameMode gs == Model.Fight = drawFight gs
 
 blitAnimations :: [Animation] -> Surface -> Position -> IO()
 blitAnimations [] _ _ =  return ()

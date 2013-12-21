@@ -11,6 +11,10 @@ import Event
 import Logics
 import MapLoader
 
+import System.Random
+
+-- idea: floor changes coloer semi-predictable, color determines tougness of battle
+
 main = do
   SDL.init [InitEverything]
   setVideoMode 800 600 32 []
@@ -24,24 +28,32 @@ main = do
   tileSurface <- SDLi.load (iSource $ head $ tsImages $ head $ mapTilesets tiledMap)
   --let image =  head $ mapTilesets m
 
+  rng <- getStdGen
+
   fnt <- openFont "font.ttf" 30
   sheet <- SDLi.load "playerWalkDown.png"
   bg <- SDLi.load "menubg.bmp"
+  fightbg <- SDLi.load "fight.png"
   
   t0 <- getTicks 
-
+  
   let player = Player Down Stop (Position 300 300) (Animation sheet 26 4 250 t0 0 (Position 0 0))
-  gameLoop (GameState True [] t0 player tiledMap tileSurface (Position 32 32) Model.Walking) t0
+  let gx = Graphics tileSurface fightbg  
+  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx)
+  let gs' = setUpNextFight gs ( fromIntegral (t0+1000) )
+
+  gameLoop gs' t0
 
 gameLoop :: GameState -> Word32 -> IO ()
 gameLoop gs lastTick = do
 
   events <- getEvents pollEvent []
   t <- getTicks
+
   let gs' = updateGamestate (handleEvents events gs) t (t - lastTick)
 
   drawGamestate gs'
-
+  putStrLn $ show $ gameMode gs
   if gameActive gs'
     then gameLoop gs' t
     else return ()

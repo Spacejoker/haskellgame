@@ -13,10 +13,19 @@ getEvents pEvent es = do
 
 handleEvents :: [Event] -> GameState -> GameState
 handleEvents [] gs = gs
-handleEvents (x:xs) gs = handleEvents xs (handleEvent x gs)
+handleEvents (x:xs) gs
+  | gameMode gs == Model.Walking = handleEvents xs (handleWalkingEvent x gs)
+  | gameMode gs == Model.Fight = handleEvents xs (handleFightEvent x gs)
 
-handleEvent :: Event -> GameState -> GameState
-handleEvent x gs = 
+handleFightEvent :: Event -> GameState -> GameState
+handleFightEvent x gs =
+  case x of
+    KeyDown (Keysym SDLK_ESCAPE _ _) -> gs {gameActive = False}
+    KeyDown (Keysym SDLK_a _ _ ) -> gs { gameMode = Model.AfterFight }
+    _ -> gs
+
+handleWalkingEvent :: Event -> GameState -> GameState
+handleWalkingEvent x gs = 
   case x of
     KeyDown (Keysym SDLK_ESCAPE _ _) -> gs {gameActive = False}
     KeyDown (Keysym SDLK_RIGHT _ _) -> gs {player = player'}
