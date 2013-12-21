@@ -3,13 +3,16 @@ module Model where
 import Graphics.UI.SDL as SDL
 
 import Data.Word
+import Data.Tiled
 
 
 data GameState = GameState{
   gameActive :: Bool,
   animations :: [Animation],
   time :: Word32,
-  player :: Player
+  player :: Player,
+  currentMap :: TiledMap,
+  tileSurface :: Surface
 }
 
 data Direction = None | Up | Down | Left | Right

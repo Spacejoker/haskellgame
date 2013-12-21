@@ -3,11 +3,13 @@ import Graphics.UI.SDL.TTF as TTF
 import Graphics.UI.SDL.Image as SDLi
 
 import Data.Word
+import Data.Tiled
 
 import Model
 import Animation
 import Event
 import Logics
+import MapLoader
 
 main = do
   SDL.init [InitEverything]
@@ -16,7 +18,11 @@ main = do
 
   setCaption "RPG" "RPG" 
 
-  enableKeyRepeat 500 30
+  --enableKeyRepeat 500 30
+
+  tiledMap <- Data.Tiled.loadMapFile "map.tmx"
+  tileSurface <- SDLi.load (iSource $ head $ tsImages $ head $ mapTilesets tiledMap)
+  --let image =  head $ mapTilesets m
 
   fnt <- openFont "font.ttf" 30
   sheet <- SDLi.load "playerWalkDown.png"
@@ -26,10 +32,10 @@ main = do
 
   let player = Player Down Stop (Position 20 20) (Animation sheet 26 4 250 t0 0 (Position 0 0))
 
-  gameLoop bg (GameState True [] t0 player) t0
+  gameLoop (GameState True [] t0 player tiledMap tileSurface) t0
 
-gameLoop :: Surface -> GameState -> Word32 -> IO ()
-gameLoop image gs lastTick = do
+gameLoop :: GameState -> Word32 -> IO ()
+gameLoop gs lastTick = do
 
   events <- getEvents pollEvent []
   t <- getTicks
@@ -38,6 +44,6 @@ gameLoop image gs lastTick = do
   drawGamestate gs'
 
   if gameActive gs'
-    then gameLoop image gs' t
+    then gameLoop gs' t
     else return ()
 
