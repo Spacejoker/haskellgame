@@ -2,11 +2,11 @@ import Graphics.UI.SDL as SDL
 import Graphics.UI.SDL.TTF as TTF
 import Graphics.UI.SDL.Image as SDLi
 
-import System.Random
+import Data.Word
 
-data GameState = GameState{
-  gameActive :: Bool
-}
+import Model
+import Animation
+import Event
 
 main = do
   SDL.init [InitEverything]
@@ -18,39 +18,41 @@ main = do
   enableKeyRepeat 500 30
 
   fnt <- openFont "font.ttf" 30
-  sheet <- SDLi.load "sheet.png"
- 
-  gameLoop sheet (GameState True)
+  sheet <- SDLi.load "playerWalkDown.png"
+  bg <- SDLi.load "menubg.bmp"
+  
+  t0 <- getTicks 
+  let player = Player Down Stop (Position 20 20) (Animation sheet 26 4 250 t0 0 (Position 0 0))
+  gameLoop bg (GameState True [] t0 player)
+
+nextPlayerPos :: Player -> Word32 -> Position
+nextPlayerPos player t
+  | speed player == Slow  && moveDirection player == Model.Right = Position (x0 + 1) y0
+  | otherwise = playerPos player
+    where x0 = xVal $ playerPos player
+          y0 = yVal $ playerPos player
+
+updatePlayer :: Player -> Word32 ->  Player
+updatePlayer player t = player { animation = animation', playerPos = playerPos' }
+  where animation' = (head  (updateAnimations  [animation player] t)) { animPos = playerPos player}
+        playerPos' = nextPlayerPos player t
+
+--update both logics and graphics, in that order
+updateGamestate :: GameState -> Word32 -> GameState
+updateGamestate gs t = gs { animations = animations', player = player' }
+  where animations' = updateAnimations (animations gs) t
+        player' = updatePlayer (player gs) t
 
 gameLoop :: Surface -> GameState-> IO ()
 gameLoop image gs = do
 
   events <- getEvents pollEvent []
   let gs' = handleEvents events gs
+  t <- getTicks
+  let gs'' = updateGamestate gs' t
+  drawGamestate gs''
 
-  s <- getVideoSurface
-
-  blitSurface image Nothing s (Just (Rect 245 370 350 460))
-  SDL.flip s
-
-  if gameActive gs'
-    then gameLoop image gs'
+  if gameActive gs''
+    then gameLoop image gs''
     else return ()
 
-getEvents :: IO Event -> [Event] -> IO [Event]
-getEvents pEvent es = do
-  e <- pEvent
-  let hasEvent = e /= NoEvent
-  if hasEvent
-    then getEvents pEvent (e:es)
-    else return (reverse es)
-
-handleEvents :: [Event] -> GameState -> GameState
-handleEvents [] gs = gs
-handleEvents (x:xs) gs = handleEvents xs (handleEvent x gs)
-
-handleEvent :: Event -> GameState -> GameState
-handleEvent x gs = 
-  case x of
-    KeyDown (Keysym SDLK_ESCAPE _ _) -> gs {gameActive = False}
-    _ -> gs
