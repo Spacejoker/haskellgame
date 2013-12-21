@@ -23,14 +23,18 @@ main = do
   
   t0 <- getTicks 
   let player = Player Down Stop (Position 20 20) (Animation sheet 26 4 250 t0 0 (Position 0 0))
-  gameLoop bg (GameState True [] t0 player)
+  gameLoop bg (GameState True [] t0 player) t0
 
 nextPlayerPos :: Player -> Word32 -> Position
-nextPlayerPos player t
-  | speed player == Slow  && moveDirection player == Model.Right = Position (x0 + 1) y0
+nextPlayerPos player dt
+  | speed player == Slow  && moveDirection player == Model.Right = Position (x0 + slowSpeed*(fromIntegral dt)) y0
+  | speed player == Slow  && moveDirection player == Model.Left = Position (x0 - slowSpeed*(fromIntegral dt)) y0
+  | speed player == Slow  && moveDirection player == Model.Up = Position x0 (y0 - slowSpeed*(fromIntegral dt))
+  | speed player == Slow  && moveDirection player == Model.Down = Position x0 (y0 + slowSpeed*(fromIntegral dt))
   | otherwise = playerPos player
     where x0 = xVal $ playerPos player
           y0 = yVal $ playerPos player
+          slowSpeed = 0.14
 
 updatePlayer :: Player -> Word32 ->  Player
 updatePlayer player t = player { animation = animation', playerPos = playerPos' }
@@ -39,20 +43,20 @@ updatePlayer player t = player { animation = animation', playerPos = playerPos' 
 
 --update both logics and graphics, in that order
 updateGamestate :: GameState -> Word32 -> GameState
-updateGamestate gs t = gs { animations = animations', player = player' }
-  where animations' = updateAnimations (animations gs) t
-        player' = updatePlayer (player gs) t
+updateGamestate gs dt = gs { animations = animations', player = player' }
+  where animations' = updateAnimations (animations gs) dt
+        player' = updatePlayer (player gs) dt
 
-gameLoop :: Surface -> GameState-> IO ()
-gameLoop image gs = do
+gameLoop :: Surface -> GameState -> Word32 -> IO ()
+gameLoop image gs lastTick = do
 
   events <- getEvents pollEvent []
   let gs' = handleEvents events gs
   t <- getTicks
-  let gs'' = updateGamestate gs' t
+  let gs'' = updateGamestate gs' (t - lastTick)
   drawGamestate gs''
 
   if gameActive gs''
-    then gameLoop image gs''
+    then gameLoop image gs'' t
     else return ()
 

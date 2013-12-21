@@ -21,5 +21,11 @@ handleEvent x gs =
     KeyDown (Keysym SDLK_ESCAPE _ _) -> gs {gameActive = False}
     KeyDown (Keysym SDLK_RIGHT _ _) -> gs {player = player'}
       where player' = (player gs){ moveDirection = Model.Right, speed = Model.Slow }
+    KeyDown (Keysym SDLK_LEFT _ _) -> gs {player = player'}
+      where player' = (player gs){ moveDirection = Model.Left, speed = Model.Slow }
+    KeyDown (Keysym SDLK_UP _ _) -> gs {player = player'}
+      where player' = (player gs){ moveDirection = Model.Up, speed = Model.Slow }
+    KeyDown (Keysym SDLK_DOWN _ _) -> gs {player = player'}
+      where player' = (player gs){ moveDirection = Model.Down, speed = Model.Slow }
     _ -> gs {player = player'}
       where player' = (player gs){ speed = Model.Stop }
