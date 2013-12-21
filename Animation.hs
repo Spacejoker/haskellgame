@@ -33,7 +33,9 @@ drawMap :: TiledMap -> Surface -> Surface -> Position -> IO ()
 drawMap m s tileSurface cameraPos = do
   let l0 = head $ mapLayers m
   let tileData = layerData l0
-  let coords = [(x, y) | x <- [0..35], y <- [0..35]]
+  let fromTileX = floor $ (xVal cameraPos)/32.0
+  let fromTileY = floor $ (yVal cameraPos)/32.0
+  let coords = [(x, y) | x <- [fromTileX..(fromTileX + 25)], y <- [fromTileY..(fromTileY + 19)]]
   drawTiles coords tileData s tileSurface cameraPos
   return ()
 

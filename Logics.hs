@@ -3,6 +3,7 @@ module Logics where
 import Graphics.UI.SDL as SDL
 
 import Data.Word
+import Data.Tiled
 
 import Model
 import Animation
@@ -29,8 +30,8 @@ posDiff minval maxval a b
   | (b-a) > maxval = b - maxval
   | otherwise = a
 
-updateCamera :: Position -> Position -> Position
-updateCamera cameraPos playerPos = Position (min (32*35-800)  (max 0 xpos)) (min (32*35-600) (max 0 ypos))
+updateCamera :: Position -> Position -> Float -> Float -> Position
+updateCamera cameraPos playerPos xdim ydim = Position (min (32*xdim-800)  (max 0 xpos)) (min (32*ydim-600) (max 0 ypos))
   where xpos = posDiff 200 600 (xVal cameraPos) (xVal playerPos)
         ypos = posDiff 200 400 (yVal cameraPos) (yVal playerPos)
 
@@ -39,5 +40,5 @@ updateGamestate :: GameState -> Word32 -> Word32 -> GameState
 updateGamestate gs t dt = gs { animations = animations', player = player', cameraPos = cameraPos' }
   where animations' = updateAnimations (animations gs) t
         player' = updatePlayer (player gs) t dt
-        cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs)
+        cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs) (fromIntegral $ mapWidth $ currentMap gs) (fromIntegral $ mapHeight $ currentMap gs)
 
