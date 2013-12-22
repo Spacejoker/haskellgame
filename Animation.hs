@@ -77,6 +77,7 @@ drawGamestate :: GameState -> IO ()
 drawGamestate gs
   | gameMode gs == Model.Walking = drawWalkingMode gs
   | gameMode gs == Model.Fight = drawFight gs
+  | gameMode gs == Model.AfterFight = return ()
 
 blitAnimations :: [Animation] -> Surface -> Position -> IO()
 blitAnimations [] _ _ =  return ()

@@ -25,10 +25,12 @@ data Graphics = Graphics {
   fightbg :: Surface,
   menumarker :: Surface,
   menubg :: Surface,
-  enemyfire :: Surface
+  enemyfire :: Surface,
+  explosion :: Surface
 }
 
 data Menu = Menu {
+  name :: String,
   choice :: Int,
   labels :: [String],
   menuPos :: Position
@@ -46,7 +48,8 @@ data GameState = GameState{
   nextFight :: Int,
   gx :: Graphics,
   menu :: Menu,
-  fnt :: Font
+  fnt :: Font,
+  actions :: [String]
 }
 
 data Animation = Animation {

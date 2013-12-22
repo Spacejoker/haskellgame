@@ -36,13 +36,14 @@ main = do
   menumarker <- SDLi.load "menumarker.png"
   menubg <- SDLi.load "menubg.png"
   enemyfire <- SDLi.load "enemyfire.png"
+  explosion <- SDLi.load "explode.png"
   
   t0 <- getTicks 
   
   let player = Player Down Stop (Position 300 300) (Animation sheet 26 4 250 t0 0 (Position 0 0))
-  let gx = Graphics tileSurface fightbg menumarker menubg enemyfire
-  let menu = Menu 0 ["Attack", "Run"] (Position 0 340)
-  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx menu fnt)
+  let gx = Graphics tileSurface fightbg menumarker menubg enemyfire explosion
+  let menu = Menu "Fight" 0 ["Attack", "Run"] (Position 0 340)
+  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx menu fnt [])
   let gs' = setUpNextFight gs ( fromIntegral (t0+1000) )
 
   gameLoop gs' t0
@@ -53,10 +54,10 @@ gameLoop gs lastTick = do
   events <- getEvents pollEvent []
   t <- getTicks
 
-  let gs' = updateGamestate (handleEvents events gs) t (t - lastTick)
+  gs' <- updateGamestate (gameMode gs) (handleEvents events gs) t (t - lastTick)
 
   drawGamestate gs'
-  --putStrLn $ show $ gameMode gs
+
   if gameActive gs'
     then gameLoop gs' t
     else return ()

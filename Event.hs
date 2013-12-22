@@ -22,9 +22,8 @@ handleFightEvent :: Event -> GameState -> GameState
 handleFightEvent x gs =
   case x of
     KeyDown (Keysym SDLK_ESCAPE _ _) -> gs {gameActive = False}
-    KeyDown (Keysym SDLK_a _ _ ) -> gs { gameMode = Model.AfterFight }
     KeyDown (Keysym SDLK_DOWN _ _ ) -> gs { menu = (menu gs) { choice = ((choice $ menu gs) + 1 )  `mod` (length $ labels $ menu gs) } }
-    KeyDown (Keysym SDLK_RETURN _ _ ) -> activateMenuOption gs
+    KeyDown (Keysym SDLK_a _ _ ) -> activateMenuOption gs (Model.name $ menu gs) (choice $ menu gs)
     _ -> gs
 
 handleWalkingEvent :: Event -> GameState -> GameState

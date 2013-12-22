@@ -47,18 +47,35 @@ checkForFight gs t
   | fromIntegral t > nextFight gs = Model.Fight
   | otherwise = Model.Walking
 
---update both logics and graphics, in that order
-updateGamestate :: GameState -> Word32 -> Word32 -> GameState
-updateGamestate gs t dt
-  -- Handle logic depending on gamestate, could need refactoring down the road
-  | gameMode gs == Model.Walking = gs { animations = animations', player = player', cameraPos = cameraPos', gameMode = gameMode'}
-  | gameMode gs == Model.AfterFight = (setUpNextFight gs ( fromIntegral (t+1000) )) { gameMode = Model.Walking }
-  | otherwise = gs
-    where animations' = updateAnimations (animations gs) t
-          player' = updatePlayer (player gs) t dt
-          cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs) (fromIntegral $ mapWidth $ currentMap gs) (fromIntegral $ mapHeight $ currentMap gs)
-          gameMode' = checkForFight gs t
+performFightActions :: GameState -> [String] -> IO()
+performFightActions gs [] = return ()
+performFightActions gs ("Attack":xs) = do
+  putStrLn "Attacking"
+   
+  --add animation 
+  return ()
+  
 
-activateMenuOption :: GameState -> GameState
-activateMenuOption gs
-  | otherwise = gs
+updateGamestate :: Model.Mode -> GameState -> Word32 -> Word32 -> IO(GameState)
+updateGamestate Model.Walking gs t dt = do
+  let animations' = updateAnimations (animations gs) t
+  let player' = updatePlayer (player gs) t dt
+  let cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs) (fromIntegral $ mapWidth $ currentMap gs) (fromIntegral $ mapHeight $ currentMap gs)
+  let gameMode' = checkForFight gs t
+  let gs' = gs { animations = animations', player = player', cameraPos = cameraPos', gameMode = gameMode'}
+  return (gs')
+
+updateGamestate Model.AfterFight gs t dt = do
+  let gs' = (setUpNextFight gs ( fromIntegral (t+1000) )) { gameMode = Model.Walking, actions = [] }
+  return (gs')
+
+updateGamestate Model.Fight gs t dt = do
+  performFightActions gs (actions gs) 
+  return (gs {actions = []})
+
+--updateGamestate _ gs t dt = return (gs)
+  
+activateMenuOption :: GameState -> String -> Int -> GameState
+activateMenuOption gs "Fight" 0 = gs { actions = actions'}
+  where actions' = ("Attack" : actions gs)
+activateMenuOption gs "Fight" 1 = gs {gameMode = Model.AfterFight }

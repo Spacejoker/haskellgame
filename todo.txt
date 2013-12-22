@@ -1,2 +1,5 @@
+add support to play 1-time animations, such an attack animation on the enemy
+model enemies and players with hp, mp and level
+show a party and a few enemies in battle
+make collision on the map
 fx when starting battles
-make the fights work in some way, give 1 xp for killing 1 enemy. Get some GUI up and running, just basic stuff
