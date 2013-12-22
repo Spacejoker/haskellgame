@@ -26,7 +26,6 @@ main = do
 
   tiledMap <- Data.Tiled.loadMapFile "map.tmx"
   tileSurface <- SDLi.load (iSource $ head $ tsImages $ head $ mapTilesets tiledMap)
-  --let image =  head $ mapTilesets m
 
   rng <- getStdGen
 
@@ -34,12 +33,16 @@ main = do
   sheet <- SDLi.load "playerWalkDown.png"
   bg <- SDLi.load "menubg.bmp"
   fightbg <- SDLi.load "fight.png"
+  menumarker <- SDLi.load "menumarker.png"
+  menubg <- SDLi.load "menubg.png"
+  enemyfire <- SDLi.load "enemyfire.png"
   
   t0 <- getTicks 
   
   let player = Player Down Stop (Position 300 300) (Animation sheet 26 4 250 t0 0 (Position 0 0))
-  let gx = Graphics tileSurface fightbg  
-  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx)
+  let gx = Graphics tileSurface fightbg menumarker menubg enemyfire
+  let menu = Menu 0 ["Attack", "Run"] (Position 0 340)
+  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx menu fnt)
   let gs' = setUpNextFight gs ( fromIntegral (t0+1000) )
 
   gameLoop gs' t0
@@ -53,7 +56,7 @@ gameLoop gs lastTick = do
   let gs' = updateGamestate (handleEvents events gs) t (t - lastTick)
 
   drawGamestate gs'
-  putStrLn $ show $ gameMode gs
+  --putStrLn $ show $ gameMode gs
   if gameActive gs'
     then gameLoop gs' t
     else return ()

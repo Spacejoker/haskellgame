@@ -1,6 +1,7 @@
 module Model where
 
 import Graphics.UI.SDL as SDL
+import Graphics.UI.SDL.TTF as TTF
 
 import Data.Word
 import Data.Tiled
@@ -21,7 +22,16 @@ data Mode = Walking | Fight | AfterFight
 
 data Graphics = Graphics {
   tileSurface :: Surface,
-  fightbg :: Surface
+  fightbg :: Surface,
+  menumarker :: Surface,
+  menubg :: Surface,
+  enemyfire :: Surface
+}
+
+data Menu = Menu {
+  choice :: Int,
+  labels :: [String],
+  menuPos :: Position
 }
 
 data GameState = GameState{
@@ -34,7 +44,9 @@ data GameState = GameState{
   gameMode :: Mode,
   rng :: StdGen,
   nextFight :: Int,
-  gx :: Graphics
+  gx :: Graphics,
+  menu :: Menu,
+  fnt :: Font
 }
 
 data Animation = Animation {

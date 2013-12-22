@@ -58,3 +58,7 @@ updateGamestate gs t dt
           player' = updatePlayer (player gs) t dt
           cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs) (fromIntegral $ mapWidth $ currentMap gs) (fromIntegral $ mapHeight $ currentMap gs)
           gameMode' = checkForFight gs t
+
+activateMenuOption :: GameState -> GameState
+activateMenuOption gs
+  | otherwise = gs
