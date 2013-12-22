@@ -26,7 +26,9 @@ data Graphics = Graphics {
   menumarker :: Surface,
   menubg :: Surface,
   enemyfire :: Surface,
-  explosion :: Surface
+  explosion :: Surface,
+  walkDownSprite :: Surface,
+  hitSprite :: Surface
 }
 
 data Menu = Menu {
@@ -59,7 +61,8 @@ data Animation = Animation {
   imageTime :: Int,
   lastSwitchTime :: Word32,
   currentImage :: Int,
-  animPos :: Position
+  animPos :: Position,
+  expire :: Maybe(Word32)
 }
 
 data Player = Player {

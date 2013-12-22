@@ -70,6 +70,7 @@ drawFight gs = do
   s <- getVideoSurface
   blitSurface (fightbg $ gx gs) Nothing s Nothing
   blitSurface (enemyfire $ gx gs) Nothing s (Just (Rect 200 100 0 0))
+  blitAnimations (animations gs) s (Position 0 0)
   drawMenu gs s
   SDL.flip s
 

@@ -4,6 +4,7 @@ import Graphics.UI.SDL as SDL
 
 import Data.Word
 import Data.Tiled
+import Data.Maybe
 
 import Model
 import Animation
@@ -47,13 +48,12 @@ checkForFight gs t
   | fromIntegral t > nextFight gs = Model.Fight
   | otherwise = Model.Walking
 
-performFightActions :: GameState -> [String] -> IO()
-performFightActions gs [] = return ()
-performFightActions gs ("Attack":xs) = do
+performFightActions :: GameState -> [String] -> Word32 -> IO(GameState)
+performFightActions gs [] _ = return (gs)
+performFightActions gs ("Attack":xs) t = do
   putStrLn "Attacking"
-   
-  --add animation 
-  return ()
+  let hitAnim = Animation (hitSprite $ gx gs) 70 3 250 t 0 (Position 0 0) (Just (t + 750))
+  return (gs {animations = (hitAnim : (animations gs))})
   
 
 updateGamestate :: Model.Mode -> GameState -> Word32 -> Word32 -> IO(GameState)
@@ -70,11 +70,10 @@ updateGamestate Model.AfterFight gs t dt = do
   return (gs')
 
 updateGamestate Model.Fight gs t dt = do
-  performFightActions gs (actions gs) 
-  return (gs {actions = []})
+  gs' <- performFightActions gs (actions gs) t
+  let animations' = updateAnimations (animations gs') t
+  return (gs' {actions = [], animations = filter (\x -> fromJust ( expire x ) > t) (animations')})
 
---updateGamestate _ gs t dt = return (gs)
-  
 activateMenuOption :: GameState -> String -> Int -> GameState
 activateMenuOption gs "Fight" 0 = gs { actions = actions'}
   where actions' = ("Attack" : actions gs)
