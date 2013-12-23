@@ -18,7 +18,7 @@ blitAnimations (x:xs) s camera = do
   let startx = (width x) * (currentImage x)
   let xpos = xVal $ animPos x
   let ypos = yVal $ animPos x
-  blitSurface (sheet x) (Just (Rect startx 0 ((width x)) 33)) s (Just (Rect (floor ( xpos - (xVal camera))) (floor (ypos - (yVal camera))) 1000 1000))
+  blitSurface (sheet x) (Just (Rect startx 0 (width x) (height x))) s (Just (Rect (floor ( xpos - (xVal camera))) (floor (ypos - (yVal camera))) 1000 1000))
   blitAnimations xs s camera
 
 nextFrame :: Animation -> Word32 -> Animation

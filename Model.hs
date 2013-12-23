@@ -29,7 +29,8 @@ data Enemy = Enemy {
   hp :: Int,
   maxmp :: Int,
   mp :: Int,
-  level :: Int
+  level :: Int,
+  curAnimation :: Animation
 }
 
 data Graphics = Graphics {
@@ -40,7 +41,8 @@ data Graphics = Graphics {
   enemyfire :: Surface,
   explosion :: Surface,
   walkDownSprite :: Surface,
-  hitSprite :: Surface
+  hitSprite :: Surface,
+  ratSprite :: Surface
 }
 
 data Menu = Menu {
@@ -70,6 +72,7 @@ data GameState = GameState{
 data Animation = Animation {
   sheet :: Surface,
   width :: Int,
+  height :: Int,
   frameCount :: Int,
   imageTime :: Int,
   lastSwitchTime :: Word32,
