@@ -30,7 +30,8 @@ data Enemy = Enemy {
   maxmp :: Int,
   mp :: Int,
   level :: Int,
-  curAnimation :: Animation
+  curAnimation :: Animation,
+  enemyPos :: Position
 }
 
 data Graphics = Graphics {
@@ -66,7 +67,8 @@ data GameState = GameState{
   menu :: Menu,
   fnt :: Font,
   actions :: [String],
-  enemies :: [Enemy]
+  enemies :: [Enemy],
+  t :: Word32
 }
 
 data Animation = Animation {

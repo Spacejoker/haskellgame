@@ -45,8 +45,11 @@ updateCamera cameraPos playerPos xdim ydim = Position (min (32*xdim-800)  (max 0
 
 setupFight :: GameState -> Word32 -> GameState
 setupFight gs t = gs { enemies = enemies' , gameMode = Model.Fight} -- create enemies here
-  where enemies' = [Enemy "Rat 1" Model.Rat 10 10 1 1 1 animation]
-        animation = Animation (ratSprite $ gx gs) 80 80 2 250 t 0 (Position 100 100) Nothing
+  where enemies' = genEnemies gs
+
+genEnemies :: GameState ->  [Enemy]
+genEnemies gs = [Enemy "Rat 1" Model.Rat 10 10 1 1 1 animation (Position 10 10)]
+  where animation = Animation (ratSprite $ gx gs) 80 80 2 250 (t gs) 0 (Position 100 100) Nothing
 
 checkForFight :: GameState -> Word32 -> GameState
 checkForFight gs t

@@ -30,7 +30,7 @@ main = do
 
   rng <- getStdGen
 
-  fnt <- openFont "font.ttf" 30
+  fnt <- openFont "LiberationMono-Bold.ttf" 20
   sheet <- SDLi.load "playerWalkDown.png"
   bg <- SDLi.load "menubg.bmp"
   fightbg <- SDLi.load "fight.png"
@@ -46,7 +46,7 @@ main = do
   let player = Player Down Stop (Position 300 300) (Animation sheet 26 70 4 250 t0 0 (Position 0 0) Nothing)
   let gx = Graphics tileSurface fightbg menumarker menubg enemyfire explosion sheet hitSprite ratSprite
   let menu = Menu "Fight" 0 ["Attack", "Run"] (Position 0 340)
-  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx menu fnt [] [])
+  let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx menu fnt [] [] t0)
   let gs' = setUpNextFight gs ( fromIntegral (t0+1000) )
 
   gameLoop gs' t0
@@ -62,6 +62,6 @@ gameLoop gs lastTick = do
   drawGamestate gs'
 
   if gameActive gs'
-    then gameLoop gs' t
+    then gameLoop gs'{t = t} t
     else return ()
 
