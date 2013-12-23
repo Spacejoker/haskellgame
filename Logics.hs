@@ -43,16 +43,19 @@ updateCamera cameraPos playerPos xdim ydim = Position (min (32*xdim-800)  (max 0
   where xpos = posDiff 200 600 (xVal cameraPos) (xVal playerPos)
         ypos = posDiff 200 400 (yVal cameraPos) (yVal playerPos)
 
-checkForFight :: GameState -> Word32 -> Mode
+setupFight :: GameState -> GameState
+setupFight gs = gs { enemies = [] , gameMode = Model.Fight} -- create enemies here
+
+checkForFight :: GameState -> Word32 -> GameState
 checkForFight gs t
-  | fromIntegral t > nextFight gs = Model.Fight
-  | otherwise = Model.Walking
+  | fromIntegral t > nextFight gs = setupFight gs
+  | otherwise = gs
 
 performFightActions :: GameState -> [String] -> Word32 -> IO(GameState)
 performFightActions gs [] _ = return (gs)
 performFightActions gs ("Attack":xs) t = do
   putStrLn "Attacking"
-  let hitAnim = Animation (hitSprite $ gx gs) 70 3 250 t 0 (Position 0 0) (Just (t + 750))
+  let hitAnim = Animation (hitSprite $ gx gs) 70 3 100 t 0 (Position 0 0) (Just (t + 300))
   return (gs {animations = (hitAnim : (animations gs))})
   
 
@@ -61,9 +64,8 @@ updateGamestate Model.Walking gs t dt = do
   let animations' = updateAnimations (animations gs) t
   let player' = updatePlayer (player gs) t dt
   let cameraPos' = updateCamera (cameraPos gs) (playerPos $ player gs) (fromIntegral $ mapWidth $ currentMap gs) (fromIntegral $ mapHeight $ currentMap gs)
-  let gameMode' = checkForFight gs t
-  let gs' = gs { animations = animations', player = player', cameraPos = cameraPos', gameMode = gameMode'}
-  return (gs')
+  let gs' = checkForFight gs t
+  return (gs' { animations = animations', player = player', cameraPos = cameraPos'})
 
 updateGamestate Model.AfterFight gs t dt = do
   let gs' = (setUpNextFight gs ( fromIntegral (t+1000) )) { gameMode = Model.Walking, actions = [] }

@@ -20,6 +20,18 @@ data Position = Position {
 data Mode = Walking | Fight | AfterFight
   deriving (Eq, Show)
 
+data EnemyType = Rat | Slime
+
+data Enemy = Enemy {
+  enemyName :: String,
+  enemyType :: EnemyType,
+  maxhp :: Int,
+  hp :: Int,
+  maxmp :: Int,
+  mp :: Int,
+  level :: Int
+}
+
 data Graphics = Graphics {
   tileSurface :: Surface,
   fightbg :: Surface,
@@ -51,7 +63,8 @@ data GameState = GameState{
   gx :: Graphics,
   menu :: Menu,
   fnt :: Font,
-  actions :: [String]
+  actions :: [String],
+  enemies :: [Enemy]
 }
 
 data Animation = Animation {
