@@ -7,6 +7,7 @@ import Data.Tiled
 
 import Model
 import Animation
+import Draw
 import Event
 import Logics
 import MapLoader
