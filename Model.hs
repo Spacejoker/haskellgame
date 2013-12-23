@@ -37,8 +37,8 @@ data Enemy = Enemy {
 data Graphics = Graphics {
   tileSurface :: Surface,
   fightbg :: Surface,
-  menumarker :: Surface,
   menubg :: Surface,
+  menumarker :: Surface,
   enemyfire :: Surface,
   explosion :: Surface,
   walkDownSprite :: Surface,

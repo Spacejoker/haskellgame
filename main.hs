@@ -31,20 +31,19 @@ main = do
   rng <- getStdGen
 
   fnt <- openFont "LiberationMono-Bold.ttf" 20
-  sheet <- SDLi.load "playerWalkDown.png"
-  bg <- SDLi.load "menubg.bmp"
-  fightbg <- SDLi.load "fight.png"
-  menumarker <- SDLi.load "menumarker.png"
-  menubg <- SDLi.load "menubg.png"
-  enemyfire <- SDLi.load "enemyfire.png"
-  explosion <- SDLi.load "explode.png"
-  hitSprite <- SDLi.load "hit.png"
-  ratSprite <- SDLi.load "rat.png"
+  sheet <- SDLi.load "image/playerWalkDown.png"
+  fightbg <- SDLi.load "image/fight.png"
+  menumarker <- SDLi.load "image/menumarker.png"
+  menubg <- SDLi.load "image/menubg.png"
+  enemyfire <- SDLi.load "image/enemyfire.png"
+  explosion <- SDLi.load "image/explode.png"
+  hitSprite <- SDLi.load "image/hit.png"
+  ratSprite <- SDLi.load "image/rat.png"
   
   t0 <- getTicks 
   
   let player = Player Down Stop (Position 300 300) (Animation sheet 26 70 4 250 t0 0 (Position 0 0) Nothing)
-  let gx = Graphics tileSurface fightbg menumarker menubg enemyfire explosion sheet hitSprite ratSprite
+  let gx = Graphics tileSurface fightbg menubg menumarker enemyfire explosion sheet hitSprite ratSprite
   let menu = Menu "Fight" 0 ["Attack", "Run"] (Position 0 340)
   let gs = (GameState True [] t0 player tiledMap (Position 32 32) Model.Walking rng 0 gx menu fnt [] [] t0)
   let gs' = setUpNextFight gs ( fromIntegral (t0+1000) )
