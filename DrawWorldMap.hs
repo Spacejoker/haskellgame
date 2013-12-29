@@ -41,9 +41,20 @@ drawMap m s tileSurface cameraPos = do
   drawTiles coords tileData s tileSurface cameraPos
   return ()
 
+drawAgents :: [Agent] -> Surface -> Position -> IO()
+drawAgents [] _ _ = return ()
+drawAgents (x:xs) s camera = do
+  let xpos = xVal $ agentPos x
+  let ypos = yVal $ agentPos x
+  let x' = floor (xpos - (xVal camera))
+  let y' = floor (ypos - (yVal camera))
+  blitSurface (agentImage x) Nothing s (Just (Rect x' y' 32 32))
+  drawAgents xs s camera
+
 drawWalkingMode :: GameState -> IO ()
 drawWalkingMode gs = do
   s <- getVideoSurface
   drawMap (currentMap gs) s (tileSurface $ gx gs) (cameraPos gs)
   blitAnimations ((animation (player gs)) : animations gs) s (cameraPos gs)
+  drawAgents (agents gs) s (cameraPos gs)
   SDL.flip s

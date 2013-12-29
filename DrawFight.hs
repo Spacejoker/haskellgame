@@ -34,5 +34,5 @@ drawFight gs = do
   blitAnimations (map curAnimation (enemies gs)) s (Position 0 0)
 
   blitAnimations (animations gs) s (Position 0 0)
-  drawMenu gs s
+  --drawMenu gs s
   SDL.flip s

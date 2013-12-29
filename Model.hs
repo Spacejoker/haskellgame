@@ -65,10 +65,12 @@ data GameState = GameState{
   nextFight :: Int,
   gx :: Graphics,
   menu :: Menu,
+  hasMenu :: Bool,
   fnt :: Font,
   actions :: [String],
   enemies :: [Enemy],
-  t :: Word32
+  t :: Word32,
+  agents :: [Agent]
 }
 
 data Animation = Animation {
@@ -88,4 +90,10 @@ data Player = Player {
   speed :: Speed,
   playerPos :: Position,
   animation :: Animation
+}
+
+data Agent = Agent {
+  agentName :: String,
+  agentPos :: Position,
+  agentImage :: Surface
 }

@@ -18,8 +18,9 @@ drawLabels (x:xs) pos s fnt = do
   blitSurface title Nothing s (Just (Rect (floor $ xVal pos) (floor $ yVal pos) 200 200))
   drawLabels xs (Position ((xVal pos)) ((yVal pos) + 30)) s fnt
 
-drawMenu :: GameState -> Surface -> IO ()
-drawMenu gs s = do
+drawMenu :: GameState -> Bool -> IO ()
+drawMenu gs True = do
+  s <- getVideoSurface
   let menu' = menu gs
   let pos' = menuPos menu'
   let gx' = gx gs
@@ -28,3 +29,5 @@ drawMenu gs s = do
   drawLabels (labels menu') (Position (((xVal pos') +10.0)) (((yVal pos') + 10.0))) s (fnt gs)
   
   return ()
+
+drawMenu _ _ = return ()
