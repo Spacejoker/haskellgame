@@ -10,7 +10,7 @@ import Animation
 import Draw
 import Event
 import Logics
-import MapLoader
+--import MapLoader
 
 import System.Random
 
