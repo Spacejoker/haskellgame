@@ -16,12 +16,18 @@ vert x y z = Vertex3 (fromIntegral x) (fromIntegral y) (realToFrac z)
 display ::IORef GLfloat -> IORef (GLfloat, GLfloat) -> DisplayCallback
 display angle pos = do
 
+  --perspective 45 1  1 200
+  --lookAt (Vertex3 15 15 (15::GLdouble)) (Vertex3 0 0 (0::GLdouble)) (Vector3 0 0 (0::GLdouble))
+
   clear [ColorBuffer, DepthBuffer]
   loadIdentity
-  --lookAt (vert 1 1 1) (vert 8 8 8) (Vector3 0 0 1)
-  (x', y') <- get pos
+  let x' = 0::GLfloat
+  let y' = 0::GLfloat
+  let z' = -10::GLfloat
   translate $ Vector3 x' y' 0
   preservingMatrix $ do
+    color (Color3 1.0 1.0 (1.0::GLfloat))
+    cube 0.1
     a <- get angle
     rotate a $ Vector3 0 0.1 1
     rotate a $ Vector3 0 1 1
