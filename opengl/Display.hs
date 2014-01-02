@@ -16,9 +16,10 @@ setCamera xtarget ztarget = do
   --loadIdentity
   lookAt (Vertex3 (10+xtarget) 10 ((10+ztarget)::Double)) (Vertex3 xtarget 0 (ztarget::Double)) (Vector3 0 1 (0::Double))
 
-display ::IORef GLfloat -> IORef (GLfloat, GLfloat) -> IORef [(GLfloat, GLfloat)] -> DisplayCallback
-display angle pos units = do
-  
+display :: IORef String -> IORef GLfloat -> IORef (GLfloat, GLfloat) -> IORef [(GLfloat, GLfloat)] -> DisplayCallback
+display str angle pos units = do
+  --curStr <- get str
+  --putStrLn curStr  
   clear [ColorBuffer, DepthBuffer]
   matrixMode $= Modelview 0
   loadIdentity
@@ -28,6 +29,9 @@ display angle pos units = do
 
   preservingMatrix $ do
     color (Color3 1 0 (0::GLfloat))
+    scale 0.001 0.001 (0.001::GLfloat)
+    renderString Roman "Test string"
+    scale 1 1 (1::GLfloat)
     units' <- get units
     forM_ units' $ \(x, z) -> preservingMatrix $ do
       loadIdentity

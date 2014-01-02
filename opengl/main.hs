@@ -14,9 +14,10 @@ main = do
   delta <- newIORef 0.1
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
-  keyboardMouseCallback $= Just (keyboardMouse delta pos)
+  curStr <- newIORef ""
+  keyboardMouseCallback $= Just (keyboardMouse curStr delta pos)
   idleCallback $= Just (idle angle delta)
-  displayCallback $= display angle pos units
+  displayCallback $= display curStr angle pos units
   initMatrix
   mainLoop
 
