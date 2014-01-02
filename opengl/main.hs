@@ -20,7 +20,7 @@ main = do
   mainLoop
 
 initMatrix = do
-  return ()
+  --return ()
   viewport $= (Position 0 0,Size 640 480)
   matrixMode $= Projection
 --  loadIdentity
