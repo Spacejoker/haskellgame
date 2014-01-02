@@ -13,9 +13,10 @@ main = do
   angle <- newIORef 0.0
   delta <- newIORef 0.1
   pos <- newIORef (0, 0)
+  units <- newIORef [(5,6), (4,5)]
   keyboardMouseCallback $= Just (keyboardMouse delta pos)
   idleCallback $= Just (idle angle delta)
-  displayCallback $= display angle pos
+  displayCallback $= display angle pos units
   initMatrix
   mainLoop
 
@@ -27,4 +28,5 @@ initMatrix = do
 --  ortho (-320) 320 (-240) 240 (-1000) 1000        
   loadIdentity 
   perspective 30.0 (4/3) 1 140000
-  lookAt (Vertex3 0 0 (30::Double)) (Vertex3 0 0 (0::Double)) (Vector3 0 1 (0::Double))
+  setCamera 8 8
+
