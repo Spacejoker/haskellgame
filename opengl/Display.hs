@@ -71,21 +71,20 @@ display str units = do
 checkWord :: IORef GameState -> String -> String -> String -> IO()
 checkWord gs tStr cStr pStr
   | length cStr > length pStr = gs $~! \gs -> gs{targetStr = "FAIL", curStr = ""}
-  | length tStr == length pStr = gs $~! \gs -> gs{targetStr = "WIN", curStr = ""}
+  | length tStr == length pStr = do
+    word' <- getWord
+    gs $~! \gs -> gs{targetStr = word', curStr = ""}
   | otherwise = return ()
 
 idle :: IORef GameState -> IdleCallback
 idle gs = do
-  --_-putStrLn "LOL"
+
   gs' <- get gs
   let tStr = targetStr gs'
       cStr = reverse $ curStr gs'
       pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
   checkWord gs tStr cStr pStr
-  --if (length $ targetStr gs') == 
-    --then gs $~! \gs -> gs{targetStr = nextTargetStr gs, nextTargetStr = ""} --(x:(curStr gs))}--writeIORef s (x:s')
-    --else return ()
-  -- update gs
-  let rng = getStdRandom (randomR (1,(6::Int)))
+
+  rng <- getStdRandom (randomR (1,(6::Int)))
   postRedisplay Nothing
 
