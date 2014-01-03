@@ -19,5 +19,5 @@ data GameState = GameState {
 }
 
 newGame :: GameState
-newGame = GameState "Write me" "" 0 0 enemies Title
+newGame = GameState "Link" "" 0 0 enemies Title
   where enemies = [Enemy (0,0) 10 10]

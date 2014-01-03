@@ -27,7 +27,7 @@ checkWord gs tStr cStr pStr
     word' <- getWord
     gs' <- get gs
     let enemies' = attackEnemy gs'
-    gs $~! \gs -> gs{targetStr = word', curStr = "A", score = (score gs') + 1, enemies = enemies'}
+    gs $~! \gs -> gs{targetStr = word', curStr = "", score = (score gs') + 1, enemies = enemies'}
   | otherwise = return ()
 
 moveEnemy :: Int -> Enemy -> Enemy
