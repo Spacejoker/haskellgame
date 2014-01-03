@@ -5,7 +5,6 @@ import Control.Monad
 import System.Random
 import Data.IORef
 
-import Points
 import Cube
 import Model
 import StringUtil

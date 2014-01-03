@@ -5,7 +5,6 @@ import Control.Monad
 import System.Random
 import Data.IORef
 
-import Points
 import Cube
 import Model
 import StringUtil
@@ -13,7 +12,7 @@ import GameTick
 
 renderMenu :: IORef GameState -> DisplayCallback
 renderMenu iogs = do
-  putStrLn "APA" 
+
   clear [ColorBuffer, DepthBuffer]
   matrixMode $= Modelview 0
   loadIdentity

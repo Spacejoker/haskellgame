@@ -5,7 +5,6 @@ import Control.Monad
 import System.Random
 import Data.IORef
 
-import Points
 import Cube
 import Model
 import StringUtil
@@ -49,17 +48,6 @@ renderGame iogs = do
     color (Color3 1 0 (0::GLfloat))
     scale 1 1 (1::GLfloat)
 
-  preservingMatrix $ do
-    color (Color3 1.0 1.0 (1.0::GLfloat))
-    forM_ boxes $ \(x, y, z) -> preservingMatrix $ do
-      loadIdentity
-      color $ Color3 ((x+1)/2) ((y+1)/2) ((z+1)/2)
-      --translate $ Vector3 (x*2) 0 (z*2)
-      --cube 1
-      --color $ Color3 (0 ::GLfloat) 0 0 
-      cubeFrame 1
-
-  -- draw enemies
   preservingMatrix $ do
     color (Color3 0 1 (1::GLfloat))
     forM_ (map enemyPos $ enemies gs) $ \(x, z) -> preservingMatrix $ do
