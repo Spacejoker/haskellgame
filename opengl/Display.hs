@@ -35,8 +35,8 @@ drawString gs = do
 
   loadIdentity
   scale sc sc sc
-  translate $ Vector3 (100) 450 (-100::GLfloat)
-  renderString MonoRoman $ show $ points gs
+  translate $ Vector3 (100) 800 (-100::GLfloat)
+  renderString MonoRoman $ show $ score gs
 
 display :: IORef GameState  -> IORef [(GLfloat, GLfloat)] -> DisplayCallback
 display str units = do
@@ -76,10 +76,13 @@ display str units = do
 
 checkWord :: IORef GameState -> String -> String -> String -> IO()
 checkWord gs tStr cStr pStr
-  | length cStr > length pStr = gs $~! \gs -> gs{targetStr = "FAIL", curStr = ""}
-  | length tStr == length pStr = do
+  | length cStr > length pStr = do
     word' <- getWord
     gs $~! \gs -> gs{targetStr = word', curStr = ""}
+  | length tStr == length pStr = do
+    word' <- getWord
+    gs' <- get gs
+    gs $~! \gs -> gs{targetStr = word', curStr = "", score = (score gs') + 1}
   | otherwise = return ()
 
 idle :: IORef GameState -> IdleCallback
@@ -90,6 +93,8 @@ idle gs = do
       cStr = reverse $ curStr gs'
       pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
   checkWord gs tStr cStr pStr
+
+  
 
   rng <- getStdRandom (randomR (1,(6::Int)))
   postRedisplay Nothing
