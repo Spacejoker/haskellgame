@@ -94,7 +94,7 @@ idle gs = do
       pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
   checkWord gs tStr cStr pStr
 
-  
+  let t = elapsedTime 
 
   rng <- getStdRandom (randomR (1,(6::Int)))
   postRedisplay Nothing
