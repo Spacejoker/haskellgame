@@ -15,20 +15,12 @@ main = do
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
-  gs <- newIORef $ GameState "Write me" "Another String" "" 0 0 [(0, 0)]
+  let enemies = [Enemy (0,0) 10 10]
+  gs <- newIORef $ GameState "Write me" "" 0 0 enemies
   keyboardMouseCallback $= Just (keyboardMouse gs)
   idleCallback $= Just (idle gs)
   displayCallback $= display gs units
   initMatrix
   mainLoop
 
-initMatrix = do
-  --return ()
-  viewport $= (Position 0 0,Size 640 480)
-  matrixMode $= Projection
---  loadIdentity
---  ortho (-320) 320 (-240) 240 (-1000) 1000        
-  loadIdentity 
-  perspective 30.0 (4/3) 1 140000
-  setCamera 8 8
 

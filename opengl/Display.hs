@@ -11,20 +11,25 @@ import Model
 import StringUtil
 import GameTick
 
-vert :: Int -> Int -> GLfloat -> Vertex3 GLdouble
-vert x y z = Vertex3 (fromIntegral x) (fromIntegral y) (realToFrac z)
+initMatrix = do
+  viewport $= (Position 0 0,Size 640 480)
+  matrixMode $= Projection
+
+  loadIdentity 
+  perspective 30.0 (4/3) 1 140000
+  setCamera 8 8
 
 setCamera xtarget ztarget = do
-  --matrixMode $= Projection
-  --loadIdentity
   lookAt (Vertex3 0 10 (50::Double)) (Vertex3 0 0 (0::Double)) (Vector3 0 1 (0::Double))
 
 drawString :: GameState -> IO()
 drawString gs = do
+
   let pref = commonPrefix (reverse $ curStr gs) (targetStr gs)
-  --putStrLn pref
+      sc = (0.01::GLfloat)
   color (Color3 1 1 (0::GLfloat))
-  let sc = (0.01::GLfloat)
+
+
   scale sc sc sc
   translate $ Vector3 (-100) 250 (-100::GLfloat)
   renderString MonoRoman $ targetStr gs
@@ -78,7 +83,7 @@ display str units = do
   -- draw enemies
   preservingMatrix $ do
     color (Color3 0 1 (1::GLfloat))
-    forM_ (enemies gs) $ \(x, z) -> preservingMatrix $ do
+    forM_ (map enemyPos $ enemies gs) $ \(x, z) -> preservingMatrix $ do
       loadIdentity
       translate $ Vector3 (x) 0.0 (z*2.0::GLfloat)
       cube 1
