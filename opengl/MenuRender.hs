@@ -31,25 +31,16 @@ renderMenu iogs = do
       color $ Color3 (0 ::GLfloat) 0 0 
       cubeFrame 1
 
-
-
-  --matrixMode $= Projection
-
-  --perspective 30.0 (16/9) 1 140000
   drawString "New Game: 'n'" (Vector3 0 200 (0::GLfloat)) (Color3 1 1 (1::GLfloat))
   ortho2D 0 1024 0 720 --(-1000) (1000::GLdouble)
   loadIdentity 
   color (Color3 1.0 1.0 (1.0::GLfloat))
-  rectangle 0 0 20 20
+  rectangle (-10) 0 5 5
   drawString "IIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIIII" (Vector3 (-2000) 400 (0::GLfloat)) (Color3 1 1 (1::GLfloat))
-  --setCamera 8 8
---glLoadIdentity ();
---gluOrtho2D (0, windowWidth, 0, windowHeight);
   
   swapBuffers
 
 rectangle :: Double -> Double -> Double -> Double -> IO ()
 rectangle x y w h = renderPrimitive Quads $ mapM_ (vertex . vert2D)
-                        [(x - w / 2, y - h / 2), (x + w / 2, y - h / 2),
-                         (x + w / 2, y + h / 2), (x - w / 2, y + h / 2)]
+                        [(x, y), (x + w , y ), (x + w, y - h ), (x , y - h )]
 
