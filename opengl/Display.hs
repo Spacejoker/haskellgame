@@ -27,10 +27,16 @@ drawString gs = do
   scale sc sc sc
   translate $ Vector3 (-100) 250 (-100::GLfloat)
   renderString MonoRoman $ targetStr gs
+
   loadIdentity
   scale sc sc sc
   translate $ Vector3 (-100) 450 (-100::GLfloat)
   renderString MonoRoman $ reverse $ curStr gs
+
+  loadIdentity
+  scale sc sc sc
+  translate $ Vector3 (100) 450 (-100::GLfloat)
+  renderString MonoRoman $ show $ points gs
 
 display :: IORef GameState  -> IORef [(GLfloat, GLfloat)] -> DisplayCallback
 display str units = do

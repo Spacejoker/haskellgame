@@ -14,7 +14,7 @@ main = do
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
-  gs <- newIORef $ GameState "Write me" "Another String" ""
+  gs <- newIORef $ GameState "Write me" "Another String" "" 0
   keyboardMouseCallback $= Just (keyboardMouse gs)
   idleCallback $= Just (idle gs)
   displayCallback $= display gs units
