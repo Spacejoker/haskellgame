@@ -15,8 +15,7 @@ main = do
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
-  let enemies = [Enemy (0,0) 10 10]
-  gs <- newIORef $ GameState "Write me" "" 0 0 enemies False
+  gs <- newIORef $ newGame 
   keyboardMouseCallback $= Just (keyboardMouse gs)
   idleCallback $= Just (idle gs)
   displayCallback $= display gs

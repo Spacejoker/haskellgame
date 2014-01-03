@@ -1,5 +1,8 @@
 module Model where
 
+data GameMode = Title | Play | GameOver | Credits
+  deriving Show
+
 data Enemy = Enemy {
   enemyPos :: (Float, Float),
   hp       :: Int,
@@ -12,5 +15,9 @@ data GameState = GameState {
   score         :: Int,
   lastUpdate    :: Int,
   enemies       :: [Enemy],
-  gameOver      :: Bool
+  mode          :: GameMode
 }
+
+newGame :: GameState
+newGame = GameState "Write me" "" 0 0 enemies Title
+  where enemies = [Enemy (0,0) 10 10]

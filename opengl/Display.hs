@@ -11,6 +11,18 @@ import StringUtil
 import GameTick
 import GameRender
 import MenuRender
+import GameOverRender
+
+display :: IORef GameState -> DisplayCallback
+display str = do
+  gs <- get str
+  putStrLn $ "OK: " ++ (show $ (mode gs))
+  delegateRender (mode gs) str
+
+delegateRender :: GameMode -> IORef GameState -> DisplayCallback
+delegateRender Play gs = renderGame gs
+delegateRender Title gs = renderMenu gs
+delegateRender GameOver gs = renderGameOver gs
 
 initMatrix = do
   viewport $= (Position 0 0,Size 640 480)
@@ -22,15 +34,3 @@ initMatrix = do
 
 setCamera xtarget ztarget = do
   lookAt (Vertex3 0 10 (50::Double)) (Vertex3 0 0 (0::Double)) (Vector3 0 1 (0::Double))
-
-delegateRender :: Bool -> IORef GameState -> DisplayCallback
-delegateRender False gs = renderGame gs
-delegateRender _ gs = renderMenu gs
-
-display :: IORef GameState -> DisplayCallback
-display str = do
-  gs <- get str
-  delegateRender (gameOver gs) str
-
-
-

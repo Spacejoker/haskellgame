@@ -9,28 +9,18 @@ import Cube
 import Model
 import StringUtil
 import GameTick
+import RenderUtil
+import System.Random
 
-drawString :: GameState -> IO()
-drawString gs = do
+drawStrings :: GameState -> IO()
+drawStrings gs = do
 
-  let pref = commonPrefix (reverse $ curStr gs) (targetStr gs)
-      sc = (0.01::GLfloat)
-  color (Color3 1 1 (0::GLfloat))
+  let sc = (0.01::GLfloat)
+      color' = (Color3 1 1 (0::GLfloat))
 
-
-  scale sc sc sc
-  translate $ Vector3 (-100) 250 (-100::GLfloat)
-  renderString MonoRoman $ targetStr gs
-
-  loadIdentity
-  scale sc sc sc
-  translate $ Vector3 (-100) 450 (-100::GLfloat)
-  renderString MonoRoman $ reverse $ curStr gs
-
-  loadIdentity
-  scale sc sc sc
-  translate $ Vector3 (100) 800 (-100::GLfloat)
-  renderString MonoRoman $ show $ score gs
+  drawString (targetStr gs) (Vector3 (-100) 250 (-100::GLfloat)) color'
+  drawString (reverse $ curStr gs) ( Vector3 (-100) 450 (-100::GLfloat) ) color'
+  drawString (show $ score gs) ( Vector3 (100) 800 (-100::GLfloat) ) color'
 
 renderGame :: IORef GameState -> DisplayCallback
 renderGame iogs = do
@@ -44,7 +34,7 @@ renderGame iogs = do
       boxes = [((x::GLfloat), 0, z) | x <- [0..width], z <- [0..width]]
 
   preservingMatrix $ do
-    drawString gs
+    drawStrings gs
     color (Color3 1 0 (0::GLfloat))
     scale 1 1 (1::GLfloat)
 

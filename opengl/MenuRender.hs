@@ -9,9 +9,11 @@ import Cube
 import Model
 import StringUtil
 import GameTick
+import RenderUtil
 
 renderMenu :: IORef GameState -> DisplayCallback
 renderMenu iogs = do
+  putStrLn "Render menu"
 
   clear [ColorBuffer, DepthBuffer]
   matrixMode $= Modelview 0
@@ -29,4 +31,7 @@ renderMenu iogs = do
       cube 1
       color $ Color3 (0 ::GLfloat) 0 0 
       cubeFrame 1
+
+  drawString "New Game: 'n'" (Vector3 0 200 (0::GLfloat)) (Color3 1 1 (1::GLfloat))
+  
   swapBuffers

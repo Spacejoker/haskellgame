@@ -9,9 +9,14 @@ import Cube
 import Model
 import StringUtil
 
+idle :: IORef GameState -> IdleCallback
+idle gs = do
+  gs' <- get gs
+  --putStrLn $ show (mode gs')
+  delegateLoop (mode gs') gs
+
 attackEnemy :: GameState -> [Enemy]
 attackEnemy gs = [Enemy (0,0) 10 10]
-  -- | otherwise = []
 
 checkWord :: IORef GameState -> String -> String -> String -> IO()
 checkWord gs tStr cStr pStr
@@ -30,34 +35,40 @@ moveEnemy dt e = e {enemyPos = enemyPos' }
   where enemyPos' = (fst p + 0.001*(fromIntegral dt), snd p)
         p = enemyPos e
 
-enemiesAtPrincess :: [Enemy] -> Bool
-enemiesAtPrincess [] = False
+enemiesAtPrincess :: [Enemy] -> GameMode
+enemiesAtPrincess [] = Play
 enemiesAtPrincess (x:xs) 
-  | (fst $ enemyPos x) > 3 = True --1 + next
+  | (fst $ enemyPos x) > 3 = GameOver --1 + next
   | otherwise = next
     where next = enemiesAtPrincess xs
 
 
-idle :: IORef GameState -> IdleCallback
-idle gs = do
-  gameLoop gs
+  --gameLoop gs
+
+delegateLoop Play gs = gameLoop gs
+delegateLoop _ _ = do
+  postRedisplay Nothing
+
+deltaTime :: Int -> Int -> Int
+deltaTime _ 0 = 0
+deltaTime t t0 = t - t0
 
 gameLoop :: IORef GameState -> IdleCallback
 gameLoop gs = do
   t <- get elapsedTime 
   gs' <- get gs
-  let dt = t - (lastUpdate gs')
+  let dt = deltaTime t (lastUpdate gs')
   let tStr = targetStr gs'
       cStr = reverse $ curStr gs'
       pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
+
   checkWord gs tStr cStr pStr
 
   --putStrLn $ show dt
   gs'' <- get gs
   rng <- getStdRandom (randomR (1,(6::Int)))
   let enemies' = map (moveEnemy dt) (enemies gs'')
-  let gameOver' = enemiesAtPrincess (enemies gs'')
-  --let enemies' = map (\(x, y) -> (x+0.01, y)) [(enemyPos $ head $ enemies gs')]
-  -- set some values
-  gs $~! \gs -> gs{lastUpdate = t, enemies = enemies', gameOver = (gameOver gs'') || gameOver'}
+  let mode' = enemiesAtPrincess (enemies gs'')
+
+  gs $~! \gs -> gs{lastUpdate = t, enemies = enemies', mode = mode'}
   postRedisplay Nothing
