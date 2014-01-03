@@ -42,9 +42,6 @@ enemiesAtPrincess (x:xs)
   | otherwise = next
     where next = enemiesAtPrincess xs
 
-
-  --gameLoop gs
-
 delegateLoop Play gs = gameLoop gs
 delegateLoop _ _ = do
   postRedisplay Nothing
@@ -64,7 +61,6 @@ gameLoop gs = do
 
   checkWord gs tStr cStr pStr
 
-  --putStrLn $ show dt
   gs'' <- get gs
   rng <- getStdRandom (randomR (1,(6::Int)))
   let enemies' = map (moveEnemy dt) (enemies gs'')

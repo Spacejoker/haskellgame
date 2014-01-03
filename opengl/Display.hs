@@ -16,7 +16,6 @@ import GameOverRender
 display :: IORef GameState -> DisplayCallback
 display str = do
   gs <- get str
-  putStrLn $ "OK: " ++ (show $ (mode gs))
   delegateRender (mode gs) str
 
 delegateRender :: GameMode -> IORef GameState -> DisplayCallback
@@ -25,11 +24,11 @@ delegateRender Title gs = renderMenu gs
 delegateRender GameOver gs = renderGameOver gs
 
 initMatrix = do
-  viewport $= (Position 0 0,Size 640 480)
+  viewport $= (Position 0 0,Size 1280 720)
   matrixMode $= Projection
 
   loadIdentity 
-  perspective 30.0 (4/3) 1 140000
+  perspective 30.0 (16/9) 1 140000
   setCamera 8 8
 
 setCamera xtarget ztarget = do

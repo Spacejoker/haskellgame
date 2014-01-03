@@ -8,7 +8,7 @@ main :: IO()
 main = do
   (_progName, _args) <- getArgsAndInitialize
   initialDisplayMode $= [WithDepthBuffer, DoubleBuffered]
-  initialWindowSize $= Size 640 480
+  initialWindowSize $= Size 1280 720
   _window <- createWindow "Hello World"
   reshapeCallback $= Just reshape
   depthFunc $= Just Less

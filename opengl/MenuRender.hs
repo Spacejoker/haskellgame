@@ -13,7 +13,6 @@ import RenderUtil
 
 renderMenu :: IORef GameState -> DisplayCallback
 renderMenu iogs = do
-  putStrLn "Render menu"
 
   clear [ColorBuffer, DepthBuffer]
   matrixMode $= Modelview 0
