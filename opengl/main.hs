@@ -1,4 +1,5 @@
 import Graphics.UI.GLUT
+import Model
 import Bindings
 import Data.IORef
 
@@ -10,14 +11,13 @@ main = do
   _window <- createWindow "Hello World"
   reshapeCallback $= Just reshape
   depthFunc $= Just Less
-  angle <- newIORef 0.0
-  delta <- newIORef 0.1
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
-  keyboardMouseCallback $= Just (keyboardMouse curStr delta pos)
-  idleCallback $= Just (idle angle delta)
-  displayCallback $= display curStr angle pos units
+  gs <- newIORef $ GameState "Write me" ""
+  keyboardMouseCallback $= Just (keyboardMouse gs)
+  idleCallback $= Just (idle)
+  displayCallback $= display gs units
   initMatrix
   mainLoop
 
