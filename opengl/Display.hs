@@ -2,6 +2,7 @@ module Display (idle, display, setCamera) where
 
 import Graphics.UI.GLUT
 import Control.Monad
+import System.Random
 import Data.IORef
 
 import Points
@@ -20,16 +21,15 @@ setCamera xtarget ztarget = do
 drawString :: GameState -> IO()
 drawString gs = do
   let pref = commonPrefix (reverse $ curStr gs) (targetStr gs)
-  putStrLn pref
+  --putStrLn pref
   color (Color3 1 1 (0::GLfloat))
-  --if (length pref) == (length $ targetStr gs)
-    --then putStrLn "Done"
-    --else return ()
   let sc = (0.01::GLfloat)
   scale sc sc sc
   translate $ Vector3 (-100) 250 (-100::GLfloat)
   renderString MonoRoman $ targetStr gs
-  translate $ Vector3 (0) 250 (0::GLfloat)
+  loadIdentity
+  scale sc sc sc
+  translate $ Vector3 (-100) 450 (-100::GLfloat)
   renderString MonoRoman $ reverse $ curStr gs
 
 display :: IORef GameState  -> IORef [(GLfloat, GLfloat)] -> DisplayCallback
@@ -53,8 +53,8 @@ display str units = do
       loadIdentity
       translate $ Vector3 (x*2) 2 (z*2)
       color (Color3 1 0 (0::GLfloat))
-      cube 0.8
-      color (Color3 0 0 (0::GLfloat))
+      --cube 0.8
+      --color (Color3 0 0 (0::GLfloat))
       cubeFrame 0.8
 
   preservingMatrix $ do
@@ -62,13 +62,30 @@ display str units = do
     forM_ boxes $ \(x, y, z) -> preservingMatrix $ do
       loadIdentity
       color $ Color3 ((x+1)/2) ((y+1)/2) ((z+1)/2)
-      translate $ Vector3 (x*2) 0 (z*2)
-      cube 1
-      color $ Color3 (0 ::GLfloat) 0 0 
+      --translate $ Vector3 (x*2) 0 (z*2)
+      --cube 1
+      --color $ Color3 (0 ::GLfloat) 0 0 
       cubeFrame 1
   swapBuffers
 
-idle :: IdleCallback
-idle = do
+checkWord :: IORef GameState -> String -> String -> String -> IO()
+checkWord gs tStr cStr pStr
+  | length cStr > length pStr = gs $~! \gs -> gs{targetStr = "FAIL", curStr = ""}
+  | length tStr == length pStr = gs $~! \gs -> gs{targetStr = "WIN", curStr = ""}
+  | otherwise = return ()
+
+idle :: IORef GameState -> IdleCallback
+idle gs = do
+  --_-putStrLn "LOL"
+  gs' <- get gs
+  let tStr = targetStr gs'
+      cStr = reverse $ curStr gs'
+      pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
+  checkWord gs tStr cStr pStr
+  --if (length $ targetStr gs') == 
+    --then gs $~! \gs -> gs{targetStr = nextTargetStr gs, nextTargetStr = ""} --(x:(curStr gs))}--writeIORef s (x:s')
+    --else return ()
+  -- update gs
+  let rng = getStdRandom (randomR (1,(6::Int)))
   postRedisplay Nothing
 

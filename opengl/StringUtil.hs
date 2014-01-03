@@ -6,3 +6,4 @@ commonPrefix _ [] = ""
 commonPrefix (x:xs) (y:ys)
   | x == y = (x:commonPrefix xs ys)
   | otherwise =  ""
+

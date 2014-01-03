@@ -14,9 +14,9 @@ main = do
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
-  gs <- newIORef $ GameState "Write me" ""
+  gs <- newIORef $ GameState "Write me" "Another String" ""
   keyboardMouseCallback $= Just (keyboardMouse gs)
-  idleCallback $= Just (idle)
+  idleCallback $= Just (idle gs)
   displayCallback $= display gs units
   initMatrix
   mainLoop
