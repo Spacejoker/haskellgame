@@ -6,5 +6,5 @@ data GameState = GameState {
   curStr        :: String,
   score         :: Int,
   lastUpdate    :: Int,
-  enemies       :: [(Int, Int)]
+  enemies       :: [(Float, Float)]
 }

@@ -36,6 +36,7 @@ idle gs = do
 
   rng <- getStdRandom (randomR (1,(6::Int)))
 
+  let enemies' = map (\(x, y) -> (x+0.01, y)) (enemies gs')
   -- set some values
-  gs $~! \gs -> gs{lastUpdate = t}
+  gs $~! \gs -> gs{lastUpdate = t, enemies = enemies'}
   postRedisplay Nothing

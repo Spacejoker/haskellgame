@@ -73,6 +73,18 @@ display str units = do
       --cube 1
       --color $ Color3 (0 ::GLfloat) 0 0 
       cubeFrame 1
+
+
+  -- draw enemies
+  preservingMatrix $ do
+    color (Color3 0 1 (1::GLfloat))
+    forM_ (enemies gs) $ \(x, z) -> preservingMatrix $ do
+      loadIdentity
+      translate $ Vector3 (x) 0.0 (z*2.0::GLfloat)
+      cube 1
+      color $ Color3 (0 ::GLfloat) 0 0 
+      cubeFrame 1
+
   swapBuffers
 
 
