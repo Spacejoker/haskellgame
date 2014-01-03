@@ -1,0 +1,15 @@
+0.1: make it play:
+death - when an enemy reaches the princess
+start menu: start game, quit game
+death menu: show score, go to title screen
+
+0.2:
+???
+
+ideas:
+gui
+harder and harder, multiple hits for certain enemies
+power ups/skills: regen and slow
+graphical objects (not primitives)
+choose category
+

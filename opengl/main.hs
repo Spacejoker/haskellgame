@@ -22,5 +22,3 @@ main = do
   displayCallback $= display gs units
   initMatrix
   mainLoop
-
-
