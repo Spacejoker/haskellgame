@@ -11,5 +11,6 @@ data GameState = GameState {
   curStr        :: String,
   score         :: Int,
   lastUpdate    :: Int,
-  enemies       :: [Enemy]
+  enemies       :: [Enemy],
+  gameOver      :: Bool
 }

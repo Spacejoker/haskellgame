@@ -16,9 +16,9 @@ main = do
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
   let enemies = [Enemy (0,0) 10 10]
-  gs <- newIORef $ GameState "Write me" "" 0 0 enemies
+  gs <- newIORef $ GameState "Write me" "" 0 0 enemies False
   keyboardMouseCallback $= Just (keyboardMouse gs)
   idleCallback $= Just (idle gs)
-  displayCallback $= display gs units
+  displayCallback $= display gs
   initMatrix
   mainLoop

@@ -31,9 +31,20 @@ moveEnemy dt e = e {enemyPos = enemyPos' }
   where enemyPos' = (fst p + 0.001*(fromIntegral dt), snd p)
         p = enemyPos e
 
+enemiesAtPrincess :: [Enemy] -> Bool
+enemiesAtPrincess [] = False
+enemiesAtPrincess (x:xs) 
+  | (fst $ enemyPos x) > 3 = True --1 + next
+  | otherwise = next
+    where next = enemiesAtPrincess xs
+
+
 idle :: IORef GameState -> IdleCallback
 idle gs = do
+  gameLoop gs
 
+gameLoop :: IORef GameState -> IdleCallback
+gameLoop gs = do
   t <- get elapsedTime 
   gs' <- get gs
   let dt = t - (lastUpdate gs')
@@ -42,12 +53,12 @@ idle gs = do
       pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
   checkWord gs tStr cStr pStr
 
-  putStrLn $ show dt
+  --putStrLn $ show dt
   gs'' <- get gs
   rng <- getStdRandom (randomR (1,(6::Int)))
   let enemies' = map (moveEnemy dt) (enemies gs'')
-
+  let gameOver' = enemiesAtPrincess (enemies gs'')
   --let enemies' = map (\(x, y) -> (x+0.01, y)) [(enemyPos $ head $ enemies gs')]
   -- set some values
-  gs $~! \gs -> gs{lastUpdate = t, enemies = enemies'}
+  gs $~! \gs -> gs{lastUpdate = t, enemies = enemies', gameOver = (gameOver gs'') || gameOver'}
   postRedisplay Nothing
