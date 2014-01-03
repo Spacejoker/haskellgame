@@ -1,6 +1,7 @@
 import Graphics.UI.GLUT
 import Model
 import Bindings
+import GameTick
 import Data.IORef
 
 main :: IO()
@@ -14,7 +15,7 @@ main = do
   pos <- newIORef (0, 0)
   units <- newIORef [(5,6), (4,5)]
   curStr <- newIORef ""
-  gs <- newIORef $ GameState "Write me" "Another String" "" 0
+  gs <- newIORef $ GameState "Write me" "Another String" "" 0 0 [(0, 0)]
   keyboardMouseCallback $= Just (keyboardMouse gs)
   idleCallback $= Just (idle gs)
   displayCallback $= display gs units

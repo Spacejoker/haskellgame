@@ -4,5 +4,7 @@ data GameState = GameState {
   targetStr     :: String,
   nextTargetStr :: String,
   curStr        :: String,
-  score        :: Int
+  score         :: Int,
+  lastUpdate    :: Int,
+  enemies       :: [(Int, Int)]
 }

@@ -1,4 +1,4 @@
-module Bindings (setCamera, idle, display, reshape, keyboardMouse) where
+module Bindings (setCamera, display, reshape, keyboardMouse) where
 
 import Graphics.UI.GLUT
 import Display

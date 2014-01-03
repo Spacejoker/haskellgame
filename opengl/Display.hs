@@ -1,4 +1,4 @@
-module Display (idle, display, setCamera) where
+module Display where
 
 import Graphics.UI.GLUT
 import Control.Monad
@@ -9,6 +9,7 @@ import Points
 import Cube
 import Model
 import StringUtil
+import GameTick
 
 vert :: Int -> Int -> GLfloat -> Vertex3 GLdouble
 vert x y z = Vertex3 (fromIntegral x) (fromIntegral y) (realToFrac z)
@@ -74,28 +75,4 @@ display str units = do
       cubeFrame 1
   swapBuffers
 
-checkWord :: IORef GameState -> String -> String -> String -> IO()
-checkWord gs tStr cStr pStr
-  | length cStr > length pStr = do
-    word' <- getWord
-    gs $~! \gs -> gs{targetStr = word', curStr = ""}
-  | length tStr == length pStr = do
-    word' <- getWord
-    gs' <- get gs
-    gs $~! \gs -> gs{targetStr = word', curStr = "", score = (score gs') + 1}
-  | otherwise = return ()
-
-idle :: IORef GameState -> IdleCallback
-idle gs = do
-
-  gs' <- get gs
-  let tStr = targetStr gs'
-      cStr = reverse $ curStr gs'
-      pStr = commonPrefix (targetStr gs') (reverse $ curStr gs')
-  checkWord gs tStr cStr pStr
-
-  let t = elapsedTime 
-
-  rng <- getStdRandom (randomR (1,(6::Int)))
-  postRedisplay Nothing
 
