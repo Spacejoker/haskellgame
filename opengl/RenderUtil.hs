@@ -10,3 +10,9 @@ drawString s pos color' = do
   scale sc sc sc
   translate $ pos
   renderString MonoRoman $ s
+
+color3 :: Double -> Double -> Double -> Color3 Double
+color3 = Color3
+
+vert2D :: (Double, Double) -> Vertex3 Double
+vert2D (x,y) = Vertex3 x y 0

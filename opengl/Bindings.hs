@@ -17,6 +17,7 @@ keyboardMouse gs key Down _ _ = do
 keyboardMouse _ _ _ _ _ = return ()
 
 handleInput Play gs key = case key of 
+  (Char ';') -> gs $~! \gs -> gs{mode = GameOver}
   (Char '\b') -> gs $~! \gs -> gs{curStr = newStr}
     where newStr = ""
   (Char x) -> gs $~! \gs -> gs{curStr = (x:(curStr gs))}--writeIORef s (x:s')
@@ -26,8 +27,9 @@ handleInput Title gs key = case key of
   (Char 'n') -> gs $~! \gs -> newGame { mode = Play }
   _ -> return ()
 
-handleInput GameOver gs _ = do
-  gs $~! \gs -> gs { mode = Title }   
+handleInput GameOver gs key = case key of
+  (Char ' ') -> gs $~! \gs -> gs { mode = Title }   
+  _ -> return ()
 
 handleInput _ _ _ = return ()
 

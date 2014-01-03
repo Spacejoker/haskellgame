@@ -29,7 +29,7 @@ initMatrix = do
 
   loadIdentity 
   perspective 30.0 (16/9) 1 140000
-  setCamera 8 8
+  setCamera 0 0
 
 setCamera xtarget ztarget = do
-  lookAt (Vertex3 0 10 (50::Double)) (Vertex3 0 0 (0::Double)) (Vector3 0 1 (0::Double))
+  lookAt (Vertex3 0 0 (50::Double)) (Vertex3 0 0 (0::Double)) (Vector3 0 1 (0::Double))

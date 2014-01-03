@@ -6,7 +6,8 @@ data GameMode = Title | Play | GameOver | Credits
 data Enemy = Enemy {
   enemyPos :: (Float, Float),
   hp       :: Int,
-  maxhp    :: Int
+  maxhp    :: Int,
+  speed    :: Float
 }
 
 data GameState = GameState {
@@ -20,4 +21,7 @@ data GameState = GameState {
 
 newGame :: GameState
 newGame = GameState "Link" "" 0 0 enemies Title
-  where enemies = [Enemy (0,0) 10 10]
+  where enemies = [newEnemy]
+
+newEnemy :: Enemy
+newEnemy = Enemy (-10,0) 10 10 1.0

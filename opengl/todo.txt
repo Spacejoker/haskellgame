@@ -4,12 +4,19 @@ start menu: start game, quit game
 death menu: show score, go to title screen
 
 0.2:
-???
+make enemy walk towards an object, from far left side of screen
+multiple hits may be needed, dmg = word length
+display hp of enemy
+basic GUI - press 1 to cast a slow on the enemy
+when enemy is at far right, make player hp go down
+still only 1 enemy at a time
 
 ideas:
-gui
-harder and harder, multiple hits for certain enemies
+harder and harder
 power ups/skills: regen and slow
 graphical objects (not primitives)
 choose category
+targeting
+more skills
+money and unlocks
 

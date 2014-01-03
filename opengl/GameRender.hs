@@ -47,4 +47,12 @@ renderGame iogs = do
       color $ Color3 (0 ::GLfloat) 0 0 
       cubeFrame 1
 
+  preservingMatrix $ do
+    loadIdentity
+    color (Color3 1.0 (192.0/255) (203.0/255.0::GLfloat))
+    translate $ Vector3 5 0 (0::GLfloat)
+    cube 1
+    color $ Color3 (0 ::GLfloat) 0 0 
+    cubeFrame 1
+
   swapBuffers

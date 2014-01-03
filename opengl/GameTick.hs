@@ -16,7 +16,7 @@ idle gs = do
   delegateLoop (mode gs') gs
 
 attackEnemy :: GameState -> [Enemy]
-attackEnemy gs = [Enemy (0,0) 10 10]
+attackEnemy gs = [newEnemy]
 
 checkWord :: IORef GameState -> String -> String -> String -> IO()
 checkWord gs tStr cStr pStr
@@ -32,7 +32,7 @@ checkWord gs tStr cStr pStr
 
 moveEnemy :: Int -> Enemy -> Enemy
 moveEnemy dt e = e {enemyPos = enemyPos' }
-  where enemyPos' = (fst p + 0.001*(fromIntegral dt), snd p)
+  where enemyPos' = (fst p + 0.001*(fromIntegral dt)*(speed e), snd p)
         p = enemyPos e
 
 enemiesAtPrincess :: [Enemy] -> GameMode
