@@ -1,6 +1,8 @@
 module Display where
 
-import Graphics.UI.GLUT
+import qualified Graphics.UI.GLFW as GLFW
+import Data.Bits ( (.|.) )
+import Graphics.Rendering.OpenGL.Raw
 import Control.Monad
 import System.Random
 import Data.IORef
@@ -13,23 +15,30 @@ import GameRender
 import MenuRender
 import GameOverRender
 
-display :: IORef GameState -> Graphics -> DisplayCallback
-display gs gx = do
-  gs' <- get gs
-  delegateRender (mode gs') gs gx
+--display :: IORef GameState -> Graphics -> GLFW.Window  -> IO ()
+--drawScene :: GLuint -> IORef GLfloat -> 
+--display gs gx _ = do
+display :: GLuint -> IORef GLfloat -> GLFW.Window  -> IO ()
+display tex angle _  = do
+  -- clear the screen and the depth buffer
+  glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
+                         .|. gl_DEPTH_BUFFER_BIT
+  glLoadIdentity  -- reset view
+  glTranslatef 0 0 (-6.0) 
 
-delegateRender :: GameMode -> IORef GameState -> Graphics-> DisplayCallback
+  glRotatef 50 1 0 0
+  glRotatef 25 0 2 0
+
+  cube 1 (Just tex)
+  --writeIORef angle  $! angle_ + 0.1
+  --angle $~! \angle -> (angle + 0.1)
+
+  glFlush
+  --gs' <- readIORef gs
+  --delegateRender (mode gs') gs gx
+  
+
+delegateRender :: GameMode -> IORef GameState -> Graphics-> IO()
 delegateRender Play gs gx = renderGame gs
 delegateRender Title gs gx = renderMenu gs gx
 delegateRender GameOver gs gx = renderGameOver gs
-
-initMatrix = do
-  viewport $= (Position 0 0,Size 1280 720)
-  matrixMode $= Projection
-
-  loadIdentity 
-  perspective 30.0 (16/9) 1 140000
-  setCamera 0 0
-
-setCamera xtarget ztarget = do
-  lookAt (Vertex3 0 0 (50::Double)) (Vertex3 0 0 (0::Double)) (Vector3 0 1 (0::Double))

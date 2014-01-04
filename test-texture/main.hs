@@ -34,7 +34,6 @@ initGL win = do
   glHint gl_PERSPECTIVE_CORRECTION_HINT gl_NICEST
   (w,h) <- GLFW.getFramebufferSize win
   resizeScene win w h
-  --return (1::GLuint)
   loadGLTextures
 
 loadGLTextures :: IO GLuint

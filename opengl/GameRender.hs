@@ -24,35 +24,5 @@ drawStrings gs = do
 
 renderGame :: IORef GameState -> DisplayCallback
 renderGame iogs = do
-  gs <- get iogs
-  let curStr' = curStr gs
-  clear [ColorBuffer, DepthBuffer]
-  matrixMode $= Modelview 0
-  loadIdentity
-  
-  let width = 10 
-      boxes = [((x::GLfloat), 0, z) | x <- [0..width], z <- [0..width]]
-
-  preservingMatrix $ do
-    drawStrings gs
-    color (Color3 1 0 (0::GLfloat))
-    scale 1 1 (1::GLfloat)
-
-  preservingMatrix $ do
-    color (Color3 0 1 (1::GLfloat))
-    forM_ (map enemyPos $ enemies gs) $ \(x, z) -> preservingMatrix $ do
-      loadIdentity
-      translate $ Vector3 (x) 0.0 (z*2.0::GLfloat)
-      cube 1
-      color $ Color3 (0 ::GLfloat) 0 0 
-      cubeFrame 1
-
-  preservingMatrix $ do
-    loadIdentity
-    color (Color3 1.0 (192.0/255) (203.0/255.0::GLfloat))
-    translate $ Vector3 5 0 (0::GLfloat)
-    cube 1
-    color $ Color3 (0 ::GLfloat) 0 0 
-    cubeFrame 1
 
   swapBuffers

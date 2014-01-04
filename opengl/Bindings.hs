@@ -1,7 +1,6 @@
 module Bindings where
 
 import Graphics.UI.GLFW as GLFW
---import Graphics.Rendering.OpenGL.GL as GL
 import Graphics.UI.GLUT as GLUT
 import Display
 import Data.IORef
@@ -34,16 +33,3 @@ handleInput GameOver gs key = case key of
   _ -> return ()
 
 handleInput _ _ _ = return ()
-
-loadTexture :: String -> IO TextureObject
-loadTexture filename = do
-  dataFileName <- getDataFileName filename
-  [texName] <- genObjectNames 1
-  textureBinding Texture2D $= Just texName
-  GLFW.loadTexture2D dataFileName [GLFW.BuildMipMaps]
-  textureFilter Texture2D $= ((Linear', Just Linear'), Linear') -- trilinear filtering
-  putStrLn $ show texName
-  return texName
-
-getDataFileName :: FilePath -> IO FilePath
-getDataFileName = return
