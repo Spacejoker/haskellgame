@@ -5,13 +5,14 @@
 module Main where
 
 -- import Graphics.UI.GLUT
-import Graphics.UI.GLFW as GLFW
+import qualified Graphics.UI.GLFW as GLFW
 -- everything from here starts with gl or GL
 import Graphics.Rendering.OpenGL.Raw
 import Graphics.Rendering.GLU.Raw ( gluPerspective )
 import Data.Bits ( (.|.) )
 import System.Exit ( exitWith, ExitCode(..) )
 import Control.Monad ( forever )
+import Data.IORef ( IORef, newIORef, readIORef, writeIORef )
 
 initGL :: GLFW.Window -> IO ()
 initGL win = do
@@ -35,12 +36,29 @@ resizeScene _   width height = do
   glLoadIdentity
   glFlush
 
-drawScene :: GLFW.Window -> IO ()
-drawScene _ = do
+drawScene :: IORef GLfloat -> GLFW.Window  -> IO ()
+drawScene angle _  = do
   -- clear the screen and the depth buffer
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                          .|. gl_DEPTH_BUFFER_BIT
   glLoadIdentity  -- reset view
+  glTranslatef 0 0 (-6.0) --Move left 1.5 Units and into the screen 6.0
+
+  angle_ <- readIORef angle
+  --putStrLn angle
+  glRotatef angle_ 0 0 1
+  glBegin gl_TRIANGLES
+  glColor3f 1 0 0
+  glVertex3f 0 1 0
+  glColor3f 1 0 1
+  glVertex3f (-1) (-1) 0
+  glColor3f 1 1 0
+  glVertex3f 1 (-1) 0
+  glEnd
+
+  writeIORef angle  $! angle_ + 10
+  --angle $~! \angle -> (angle + 0.1)
+
   glFlush
 
 shutdown :: GLFW.WindowCloseCallback
@@ -60,10 +78,11 @@ main = do
      GLFW.defaultWindowHints
      -- get a 640 x 480 window
      -- initialize our window.
-     Just win <- GLFW.createWindow 640 480 "Lesson 1" Nothing Nothing
+     Just win <- GLFW.createWindow 1280 720 "Lesson 1" Nothing Nothing
      GLFW.makeContextCurrent (Just win)
      -- register the function to do all our OpenGL drawing
-     GLFW.setWindowRefreshCallback win (Just drawScene)
+     angle <- newIORef 0
+     GLFW.setWindowRefreshCallback win (Just (drawScene angle))
      -- register the funciton called when our window is resized
      GLFW.setFramebufferSizeCallback win (Just resizeScene)
      -- register the function called when the keyboard is pressed.
@@ -74,5 +93,5 @@ main = do
      -- start event processing engine
      forever $ do
        GLFW.pollEvents
-       drawScene win
+       drawScene angle win
        GLFW.swapBuffers win
