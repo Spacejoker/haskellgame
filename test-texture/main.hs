@@ -56,7 +56,62 @@ drawScene angle _  = do
   glVertex3f 1 (-1) 0
   glEnd
 
-  writeIORef angle  $! angle_ + 10
+  glLoadIdentity
+  glTranslatef 0 0 (-5.0) --Move left 1.5 Units and into the screen 6.0
+
+  glRotatef (angle_*20) 1 0.3 0.5
+  glRotatef (angle_) 0 1 0
+  -- cube
+  let w = 1
+  glBegin gl_QUADS
+
+  glColor3f 1 0.5 0
+
+  glVertex3f 0 0 0
+  glVertex3f w 0 0
+  glVertex3f w w 0
+  glVertex3f 0 w 0
+
+  glColor3f 1 0 0
+
+  glVertex3f 0 0 0
+  glVertex3f 0 0 w
+  glVertex3f 0 w w
+  glVertex3f 0 w 0
+
+  glColor3f 0 0 1
+
+  glVertex3f w 0 0
+  glVertex3f w 0 w
+  glVertex3f w w w
+  glVertex3f w w 0
+
+  glColor3f 0 0.5 0
+
+  glVertex3f 0 0 w
+  glVertex3f w 0 w
+  glVertex3f w w w
+  glVertex3f 0 w w
+
+  glColor3f 0 0.5 1
+
+  glVertex3f 0 0 0
+  glVertex3f w 0 0
+  glVertex3f w 0 w
+  glVertex3f 0 0 w
+
+  glColor3f 1 0.5 1
+
+  glVertex3f 0 w 0
+  glVertex3f w w 0
+  glVertex3f w w w
+  glVertex3f 0 w w
+
+  glEnd
+
+  
+
+  writeIORef angle  $! angle_ + 0.1
   --angle $~! \angle -> (angle + 0.1)
 
   glFlush
