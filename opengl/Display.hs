@@ -18,8 +18,8 @@ import GameOverRender
 --display :: IORef GameState -> Graphics -> GLFW.Window  -> IO ()
 --drawScene :: GLuint -> IORef GLfloat -> 
 --display gs gx _ = do
-display :: GLuint -> IORef GLfloat -> GLFW.Window  -> IO ()
-display tex angle _  = do
+display :: IORef Gamestate -> Grahpics -> GLFW.Window  -> IO ()
+display gs gx _  = do
   -- clear the screen and the depth buffer
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                          .|. gl_DEPTH_BUFFER_BIT
@@ -29,7 +29,7 @@ display tex angle _  = do
   glRotatef 50 1 0 0
   glRotatef 25 0 2 0
 
-  cube 1 (Just tex)
+  cube 1 (Just $ texCube gx)
   --writeIORef angle  $! angle_ + 0.1
   --angle $~! \angle -> (angle + 0.1)
 

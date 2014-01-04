@@ -23,28 +23,19 @@ main = do
   True <- GLFW.init
   --loadImage
   GLFW.defaultWindowHints
-  -- get a 640 x 480 window
-  -- initialize our window.
   Just win <- GLFW.createWindow 1280 720 "YOLO" Nothing Nothing
   GLFW.makeContextCurrent (Just win)
-  -- register the function to do all our OpenGL drawing
-  angle <- newIORef 0
+
   gs <- newIORef $ newGame 
-  --texCube  <- loadTexture "cube.tga"
-  --tex <- initGL win
-  --let gx = Graphics tex
-  --putStrLn $ show tex
-  --GLFW.setWindowRefreshCallback win (Just (display gs gx))
   tex <- initGL win
-  putStrLn $ show tex
-  GLFW.setWindowRefreshCallback win (Just (display tex angle))
-  -- register the funciton called when our window is resized
+  let gx = Graphics tex
+
+  GLFW.setWindowRefreshCallback win (Just (display gs gx))
+
   GLFW.setFramebufferSizeCallback win (Just resizeScene)
-  -- register the function called when the keyboard is pressed.
   GLFW.setKeyCallback win (Just keyPressed)
-  -- register window close handler
   GLFW.setWindowCloseCallback win (Just shutdown)
-  -- start event processing engine
+
   forever $ do
     GLFW.pollEvents
     drawScene tex angle win
