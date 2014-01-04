@@ -18,7 +18,7 @@ import GameOverRender
 --display :: IORef GameState -> Graphics -> GLFW.Window  -> IO ()
 --drawScene :: GLuint -> IORef GLfloat -> 
 --display gs gx _ = do
-display :: IORef Gamestate -> Grahpics -> GLFW.Window  -> IO ()
+display :: IORef GameState -> Graphics -> GLFW.Window  -> IO ()
 display gs gx _  = do
   -- clear the screen and the depth buffer
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT

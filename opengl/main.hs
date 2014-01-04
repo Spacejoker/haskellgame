@@ -38,7 +38,7 @@ main = do
 
   forever $ do
     GLFW.pollEvents
-    drawScene tex angle win
+    display gs gx win
     GLFW.swapBuffers win
 
 initGL :: GLFW.Window -> IO GLuint
