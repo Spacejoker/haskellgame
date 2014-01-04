@@ -1,5 +1,7 @@
 module Model where
 
+import Graphics.UI.GLUT as GLUT
+
 data GameMode = Title | Play | GameOver | Credits
   deriving Show
 
@@ -17,6 +19,10 @@ data GameState = GameState {
   lastUpdate    :: Int,
   enemies       :: [Enemy],
   mode          :: GameMode
+}
+
+data Graphics = Graphics {
+  texCube       :: TextureObject
 }
 
 newGame :: GameState
