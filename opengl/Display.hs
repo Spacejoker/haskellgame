@@ -1,6 +1,8 @@
 module Display where
 
 import Graphics.UI.GLUT (elapsedTime, get)
+import Graphics.Rendering.GLU.Raw ( gluPerspective )
+import Graphics.Rendering.FTGL
 
 import qualified Graphics.UI.GLFW as GLFW
 import Data.Bits ( (.|.) )
@@ -22,9 +24,18 @@ display gs gx _  = do
 
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                          .|. gl_DEPTH_BUFFER_BIT
+  let width = 1280
+      height = 720
+  glEnable gl_TEXTURE_2D
+  glMatrixMode gl_PROJECTION
+  glLoadIdentity
+  gluPerspective 45 (16.0/9.0) 0.1 100 
+  glMatrixMode gl_MODELVIEW
+  glEnable gl_DEPTH_TEST
+  glLoadIdentity
 
-  glLoadIdentity  -- reset view
-  glTranslatef 0 0 (-6.0) 
+  glBindTexture gl_TEXTURE_2D (texCube gx)
+  glColor3f 1 1 1
 
   glRotatef 50 1 0 0
   glRotatef 25 0 2 0
@@ -34,6 +45,21 @@ display gs gx _  = do
   --map (\(x, y) -> putStrLn $ show x ) pos
   drawSinCubes fsin (Just $ texCube gx) (fromIntegral t)
   --cube 0.2 (Just $ texCube gx)
+
+  glMatrixMode gl_PROJECTION
+  glDisable gl_TEXTURE_2D
+  glLoadIdentity
+  glOrtho 0.0 width height 0.0 (-1.0) 1.0
+  glMatrixMode gl_MODELVIEW
+  glDisable gl_DEPTH_TEST
+  glLoadIdentity
+  --glLoadIdentity  -- reset view
+  glColor3f 1 0.2 0.2
+  ---putStrLn $ show $ font gx
+  glRasterPos2f 10 20
+  setFontFaceSize (font gx) 24 72
+  --glTranslated 100 100 0
+  renderFont (font gx) "Super awesome openGL text - nemas problemas" All
 
   glFlush
 

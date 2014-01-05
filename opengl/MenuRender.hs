@@ -46,9 +46,10 @@ renderMenu iogs gx = do
 
   glLoadIdentity  -- reset view
   glColor3f 1 1 1 
-  font <- createTextureFont "Font.ttf"
-  setFontFaceSize font 24 72
-  renderFont font "Hello world!" All
+  putStrLn "TOOO"
+  putStrLn $ show $ font gx
+  setFontFaceSize (font gx) 24 72
+  renderFont (font gx) "Hello world!" All
 
   glFlush
 

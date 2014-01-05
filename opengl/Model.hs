@@ -2,6 +2,7 @@ module Model where
 
 --import Graphics.UI.GLUT as GLUT
 import Graphics.Rendering.OpenGL.Raw
+import Graphics.Rendering.FTGL
 --import qualified Graphics.UI.GLFW as GLFW
 
 data GameMode = Title | Play | GameOver | Credits
@@ -24,7 +25,8 @@ data GameState = GameState {
 }
 
 data Graphics = Graphics {
-  texCube       :: GLuint
+  texCube       :: GLuint,
+  font          :: Font
 }
 
 newGame :: GameState

@@ -1,4 +1,5 @@
 import qualified Graphics.UI.GLFW as GLFW
+import Graphics.Rendering.FTGL
 import Graphics.Rendering.OpenGL.Raw
 import Graphics.Rendering.GLU.Raw ( gluPerspective )
 import Data.Bits ( (.|.) )
@@ -28,9 +29,11 @@ main = do
   Just win <- GLFW.createWindow 1280 720 "YOLO" Nothing Nothing
   GLFW.makeContextCurrent (Just win)
 
+  font <- createBitmapFont "font.tff"
+  putStrLn $ show font
   gs <- newIORef $ newGame 
   tex <- initGL win
-  let gx = Graphics tex
+  let gx = Graphics tex font
   
   --let f = CreateFont
 
