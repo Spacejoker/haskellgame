@@ -19,6 +19,7 @@ import GameRender
 import MenuRender
 import GameOverRender
 import RenderUtil
+import Data.String.Utils
 
 
 display :: IORef GameState -> Graphics -> GLFW.Window  -> IO ()
@@ -66,22 +67,24 @@ displayScene Title gs gx  = do
                textColor chosenColor 0 (menuChoice gs')
   glFlush
 
-
 displayScene Play gs gx = do
   
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                          .|. gl_DEPTH_BUFFER_BIT
-
   setup2D
   
   gs' <- readIORef gs 
   let target = targetStr gs'
-      common = commonPrefix (reverse $ curStr gs') target
+      curStr' = curStr gs'
+      common = commonStr gs'--commonPrefix curStr' target
   drawText (font gx) target (30, 30) (1,1,1)
-  drawText (font gx) (reverse $ curStr gs') (30, 58) (1,0,0)
-  drawText (font gx) common (30, 86) (0,0.8,0)
-
+  drawText (font gx) (writeFormat curStr') (30, 58) (1,0,0)
+  drawText (font gx) (writeFormat common) (30, 86) (0,0.8,0)
+  drawText (font gx) ("Score: " ++ (show $ score gs')) (30, 116) (0,0.8,0)
   glFlush
+
+writeFormat :: String -> String
+writeFormat s = replace " " "_" s
 
 renderTextMenu :: Font -> [(String, (GLfloat, GLfloat))]-> (GLfloat, GLfloat, GLfloat) ->
                 (GLfloat, GLfloat, GLfloat) -> Int -> Int -> IO()

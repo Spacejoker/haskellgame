@@ -46,6 +46,7 @@ main = do
 
   forever $ do
     GLFW.pollEvents
+    makeLogics gs
     display gs gx win
     GLFW.swapBuffers win
 

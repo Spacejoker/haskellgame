@@ -40,9 +40,7 @@ handleEvent gs Credits GLFW.Key'Enter = do
 
 handleEvent gs Play GLFW.Key'Backspace = do
   gs' <- readIORef gs
-  --putStrLn $ show key
-  let (x:xs) = curStr gs'
-  writeIORef gs $! gs' { curStr = xs }
+  writeIORef gs $! gs' { curStr = Prelude.init $ curStr gs' }
 
 handleEvent _  _       _ = return ()
 
@@ -55,8 +53,7 @@ appendWriting :: GameMode -> Char -> IORef GameState -> IO ()
 appendWriting Play c gs = do
   gs' <- readIORef gs
   let curStr' = curStr gs'
-  writeIORef gs $! gs' { curStr = (c:curStr') }
-  putStrLn $ curStr'
+  writeIORef gs $! gs' { curStr = curStr' ++ [c] }
 appendWriting _ _ _ = return ()
 
 -- OLD SHIT

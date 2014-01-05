@@ -9,10 +9,28 @@ import Cube
 import Model
 import StringUtil
 
+makeLogics :: IORef GameState -> IO()
+makeLogics gs = do
+
+  gs' <- readIORef gs 
+  let target = targetStr gs'
+      common = commonPrefix (curStr gs') target
+  nextTarget common target gs
+  gs'' <- readIORef gs
+  writeIORef gs $! gs'' { commonStr = common }
+
+nextTarget :: String -> String -> IORef GameState -> IO()
+nextTarget cur target gs
+  | (length cur) == (length target) = do
+    word' <- getWord
+    gs' <- readIORef gs
+    
+    writeIORef gs $! gs' { targetStr = word', curStr = "", score = (score gs') + 1 }
+  | otherwise = return ()
+
 idle :: IORef GameState -> IdleCallback
 idle gs = do
   gs' <- get gs
-  --putStrLn $ show (mode gs')
   delegateLoop (mode gs') gs
 
 attackEnemy :: GameState -> [Enemy]

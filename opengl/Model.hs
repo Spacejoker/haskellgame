@@ -22,6 +22,7 @@ data Enemy = Enemy {
 data GameState = GameState {
   targetStr     :: String,
   curStr        :: String,
+  commonStr     :: String,
   score         :: Int,
   lastUpdate    :: Int,
   enemies       :: [Enemy],
@@ -35,7 +36,7 @@ data Graphics = Graphics {
 }
 
 newGame :: GameState
-newGame = GameState "Link" "" 0 0 enemies Title 0
+newGame = GameState "Link" "" "" 0 0 enemies Title 0
   where enemies = [newEnemy]
 
 newEnemy :: Enemy
