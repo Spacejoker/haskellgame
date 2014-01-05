@@ -18,9 +18,10 @@ drawStrings gs = do
   let sc = (0.01::GLfloat)
       color' = (Color3 1 1 (0::GLfloat))
 
-  drawString (targetStr gs) (Vector3 (-100) 250 (-100::GLfloat)) color'
-  drawString (reverse $ curStr gs) ( Vector3 (-100) 450 (-100::GLfloat) ) color'
-  drawString (show $ score gs) ( Vector3 (100) 800 (-100::GLfloat) ) color'
+  --drawString (targetStr gs) (Vector3 (-100) 250 (-100::GLfloat)) color'
+  --drawString (reverse $ curStr gs) ( Vector3 (-100) 450 (-100::GLfloat) ) color'
+  --drawString (show $ score gs) ( Vector3 (100) 800 (-100::GLfloat) ) color'
+  return ()
 
 renderGame :: IORef GameState -> DisplayCallback
 renderGame iogs = do

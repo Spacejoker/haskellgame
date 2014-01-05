@@ -1,18 +1,34 @@
 module RenderUtil where
 
-import Graphics.UI.GLUT
+--import Graphics.UI.GLUT
+import Graphics.Rendering.OpenGL.Raw
+import Graphics.Rendering.GLU.Raw ( gluPerspective )
+import Graphics.Rendering.FTGL
 
-drawString :: String -> Vector3 GLfloat-> Color3 GLfloat -> IO()
-drawString s pos color' = do
-  let sc = (0.01::GLfloat)
-  color color'
-  loadIdentity
-  scale sc sc sc
-  translate $ pos
-  renderString MonoRoman $ s
+screenWidth :: GLdouble
+screenWidth = 1280
+screenHeight :: GLdouble
+screenHeight = 720
 
-color3 :: Double -> Double -> Double -> Color3 Double
-color3 = Color3
+setup3D :: IO()
+setup3D = do
+  glEnable gl_TEXTURE_2D
+  glMatrixMode gl_PROJECTION
+  glLoadIdentity
+  gluPerspective 45 (16.0/9.0) 0.1 100 
+  glMatrixMode gl_MODELVIEW
+  glEnable gl_DEPTH_TEST
+  glLoadIdentity
+  glColor3f 1 1 1
 
-vert2D :: (Double, Double) -> Vertex3 Double
-vert2D (x,y) = Vertex3 x y 0
+setup2D :: IO()
+setup2D = do
+  glMatrixMode gl_PROJECTION
+  glDisable gl_TEXTURE_2D
+  glLoadIdentity
+  glOrtho 0.0 screenWidth screenHeight 0.0 (-1.0) 1.0
+  glMatrixMode gl_MODELVIEW
+  glDisable gl_DEPTH_TEST
+  glLoadIdentity
+  glColor3f 1 1 1
+

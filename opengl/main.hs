@@ -40,7 +40,7 @@ main = do
   GLFW.setWindowRefreshCallback win (Just (display gs gx))
 
   GLFW.setFramebufferSizeCallback win (Just resizeScene)
-  GLFW.setKeyCallback win (Just keyPressed)
+  GLFW.setKeyCallback win (Just $ keyPressed gs)
   GLFW.setWindowCloseCallback win (Just shutdown)
 
   forever $ do
@@ -115,16 +115,6 @@ drawScene tex angle _  = do
 
   glFlush
 
-shutdown :: GLFW.WindowCloseCallback
-shutdown win = do
-  GLFW.destroyWindow win
-  GLFW.terminate
-  _ <- exitWith ExitSuccess
-  return ()
-
-keyPressed :: GLFW.KeyCallback 
-keyPressed win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
-keyPressed _   _               _ _                     _ = return ()
 
 --main :: IO()
 --main = do

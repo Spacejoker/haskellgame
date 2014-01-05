@@ -21,7 +21,8 @@ data GameState = GameState {
   score         :: Int,
   lastUpdate    :: Int,
   enemies       :: [Enemy],
-  mode          :: GameMode
+  mode          :: GameMode,
+  menuChoice    :: Int
 }
 
 data Graphics = Graphics {
@@ -30,7 +31,7 @@ data Graphics = Graphics {
 }
 
 newGame :: GameState
-newGame = GameState "Link" "" 0 0 enemies Title
+newGame = GameState "Link" "" 0 0 enemies Title 0
   where enemies = [newEnemy]
 
 newEnemy :: Enemy
