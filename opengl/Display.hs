@@ -61,21 +61,22 @@ displayScene Title gs gx  = do
       textColor = (0.2, 0.2, 0.3)
       chosenColor = (0.5+mod, 0.5+mod, 0.5+mod)
       xBase = 570
-  renderMenu' (font gx) 
+  renderTextMenu (font gx) 
                [("New Game", (xBase, 400)),( "Credits", (xBase + 12, 440)), ("  Quit", (xBase, 480))]
                textColor chosenColor 0 (menuChoice gs')
   glFlush
 
-renderMenu' :: Font -> [(String, (GLfloat, GLfloat))]-> (GLfloat, GLfloat, GLfloat) ->
+--
+renderTextMenu :: Font -> [(String, (GLfloat, GLfloat))]-> (GLfloat, GLfloat, GLfloat) ->
                 (GLfloat, GLfloat, GLfloat) -> Int -> Int -> IO()
-renderMenu' _ [] _ _ _ _ = return ()
-renderMenu' fnt ((s, (x, y)):xs)  unchosen chosen cur choice
+renderTextMenu _ [] _ _ _ _ = return ()
+renderTextMenu fnt ((s, (x, y)):xs)  unchosen chosen cur choice
   | cur == choice = do
     drawText fnt s (x, y) chosen
-    renderMenu' fnt xs unchosen chosen (cur+1) choice
+    renderTextMenu fnt xs unchosen chosen (cur+1) choice
   | otherwise = do
     drawText fnt s (x, y) unchosen
-    renderMenu' fnt xs unchosen chosen (cur+1) choice
+    renderTextMenu fnt xs unchosen chosen (cur+1) choice
     
 
 drawText :: Font -> String -> (GLfloat, GLfloat) -> (GLfloat, GLfloat, GLfloat) -> IO()

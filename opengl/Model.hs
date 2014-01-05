@@ -8,6 +8,10 @@ import Graphics.Rendering.FTGL
 data GameMode = Title | Play | GameOver | Credits
   deriving Show
 
+modeFromInt 0 = Title
+modeFromInt 1 = Credits
+modeFromInt 2 = Title
+
 data Enemy = Enemy {
   enemyPos :: (Float, Float),
   hp       :: Int,

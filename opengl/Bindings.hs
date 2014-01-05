@@ -8,17 +8,6 @@ import Display
 import Data.IORef
 import Model
 
-reshape :: ReshapeCallback
-reshape size = do
-  GLUT.viewport GLUT.$= (GLUT.Position 0 0, size)
-  postRedisplay Nothing
-
-keyboardMouse :: IORef GameState -> KeyboardMouseCallback
-keyboardMouse gs key Down _ _ = do
-  gs' <- get gs
-  handleInput (mode gs') gs key
-keyboardMouse _ _ _ _ _ = return ()
-
 shutdown :: GLFW.WindowCloseCallback
 shutdown win = do
   GLFW.destroyWindow win
@@ -26,23 +15,42 @@ shutdown win = do
   _ <- exitWith ExitSuccess
   return ()
 
-modeFromInt 0 = Title
-modeFromInt 1 = Credits
-modeFromInt 2 = Title
-
-
 keyPressed :: IORef GameState -> GLFW.KeyCallback 
 keyPressed gs win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
-keyPressed gs win GLFW.Key'Enter _ GLFW.KeyState'Pressed _ = do
+keyPressed gs _ key _ GLFW.KeyState'Pressed _ = do
+  gs' <- readIORef gs
+  let mode' = mode gs'
+  handleEvent gs mode' key
+keyPressed _  _   _               _ _                     _ = return ()
+
+handleEvent :: IORef GameState -> GameMode -> GLFW.Key -> IO()
+handleEvent gs Title GLFW.Key'Enter = do
   gs' <- readIORef gs
   writeIORef gs $! gs' { mode = modeFromInt $ menuChoice gs' }
-keyPressed gs win GLFW.Key'Up _ GLFW.KeyState'Pressed _ = do
+handleEvent gs Title GLFW.Key'Up = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = max ((menuChoice gs') - 1) 0}
-keyPressed gs win GLFW.Key'Down _ GLFW.KeyState'Pressed _ = do
+handleEvent gs Title GLFW.Key'Down = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = min ((menuChoice gs') + 1) 2}
-keyPressed _  _   _               _ _                     _ = return ()
+
+handleEvent gs Credits GLFW.Key'Enter = do
+  gs' <- readIORef gs
+  writeIORef gs $! gs' { mode = Title }
+
+handleEvent _  _       _ = return ()
+
+
+-- OLD SHIT
+reshape :: ReshapeCallback
+reshape size = do
+  GLUT.viewport GLUT.$= (GLUT.Position 0 0, size)
+  postRedisplay Nothing
+keyboardMouse :: IORef GameState -> KeyboardMouseCallback
+keyboardMouse gs key Down _ _ = do
+  gs' <- get gs
+  handleInput (mode gs') gs key
+keyboardMouse _ _ _ _ _ = return ()
 
 handleInput Play gs key = case key of 
   (Char ';') -> gs $~! \gs -> gs{mode = GameOver}
