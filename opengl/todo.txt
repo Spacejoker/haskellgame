@@ -4,6 +4,12 @@ start menu: start game, quit game
 death menu: show score, go to title screen
 
 0.2:
+change to GL.RAW
+display animations again
+display textures
+display text
+
+0.3:
 make enemy walk towards an object, from far left side of screen
 multiple hits may be needed, dmg = word length
 display hp of enemy
