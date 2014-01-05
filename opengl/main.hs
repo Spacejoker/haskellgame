@@ -8,6 +8,7 @@ import Data.IORef ( IORef, newIORef, readIORef, writeIORef )
 import Foreign ( withForeignPtr, plusPtr, peek, alloca )
 import qualified Data.ByteString.Internal as BSI
 import Data.Maybe
+import Graphics.UI.GLUT (getArgsAndInitialize)
 
 import Util
 import Model
@@ -20,6 +21,7 @@ import Cube
 
 main :: IO ()
 main = do
+  (_progName, _args) <- getArgsAndInitialize
   True <- GLFW.init
   --loadImage
   GLFW.defaultWindowHints

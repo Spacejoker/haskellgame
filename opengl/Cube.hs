@@ -10,7 +10,7 @@ cube w tex = do
   --glBindTexture gl_TEXTURE_2D (fromJust tex)
 
   glBegin gl_QUADS -- start drawing a polygon (4 sided)
-  glColor3f 1 1 0
+  -- glColor3f 1 1 0
   glTexCoord2f   0    0
   glVertex3f   (-w) (-w)    w  -- bottom left of quad (Front)
   glTexCoord2f   1    0
