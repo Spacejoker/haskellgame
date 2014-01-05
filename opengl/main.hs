@@ -41,6 +41,7 @@ main = do
 
   GLFW.setFramebufferSizeCallback win (Just resizeScene)
   GLFW.setKeyCallback win (Just $ keyPressed gs)
+  GLFW.setCharCallback win (Just $ textInput gs)
   GLFW.setWindowCloseCallback win (Just shutdown)
 
   forever $ do

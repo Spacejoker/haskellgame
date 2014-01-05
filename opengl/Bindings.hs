@@ -38,8 +38,26 @@ handleEvent gs Credits GLFW.Key'Enter = do
   gs' <- readIORef gs
   writeIORef gs $! gs' { mode = Title }
 
+handleEvent gs Play GLFW.Key'Backspace = do
+  gs' <- readIORef gs
+  --putStrLn $ show key
+  let (x:xs) = curStr gs'
+  writeIORef gs $! gs' { curStr = xs }
+
 handleEvent _  _       _ = return ()
 
+textInput :: IORef GameState -> GLFW.CharCallback
+textInput gs a b = do
+  gs' <- readIORef gs
+  appendWriting (mode gs') b gs
+
+appendWriting :: GameMode -> Char -> IORef GameState -> IO ()
+appendWriting Play c gs = do
+  gs' <- readIORef gs
+  let curStr' = curStr gs'
+  writeIORef gs $! gs' { curStr = (c:curStr') }
+  putStrLn $ curStr'
+appendWriting _ _ _ = return ()
 
 -- OLD SHIT
 reshape :: ReshapeCallback

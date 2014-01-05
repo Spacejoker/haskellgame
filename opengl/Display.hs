@@ -66,7 +66,23 @@ displayScene Title gs gx  = do
                textColor chosenColor 0 (menuChoice gs')
   glFlush
 
---
+
+displayScene Play gs gx = do
+  
+  glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
+                         .|. gl_DEPTH_BUFFER_BIT
+
+  setup2D
+  
+  gs' <- readIORef gs 
+  let target = targetStr gs'
+      common = commonPrefix (reverse $ curStr gs') target
+  drawText (font gx) target (30, 30) (1,1,1)
+  drawText (font gx) (reverse $ curStr gs') (30, 58) (1,0,0)
+  drawText (font gx) common (30, 86) (0,0.8,0)
+
+  glFlush
+
 renderTextMenu :: Font -> [(String, (GLfloat, GLfloat))]-> (GLfloat, GLfloat, GLfloat) ->
                 (GLfloat, GLfloat, GLfloat) -> Int -> Int -> IO()
 renderTextMenu _ [] _ _ _ _ = return ()
@@ -96,8 +112,3 @@ drawSinCubes ((a, b):xs) tex t = do
   glRotatef (t*0.08) 0 2 0
   cube 0.2 tex
   drawSinCubes xs tex t
-
-delegateRender :: GameMode -> IORef GameState -> Graphics-> IO()
-delegateRender Play gs gx = renderGame gs
-delegateRender Title gs gx = renderMenu gs gx
-delegateRender GameOver gs gx = renderGameOver gs

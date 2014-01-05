@@ -8,7 +8,7 @@ import Graphics.Rendering.FTGL
 data GameMode = Title | Play | GameOver | Credits
   deriving Show
 
-modeFromInt 0 = Title
+modeFromInt 0 = Play
 modeFromInt 1 = Credits
 modeFromInt 2 = Title
 
