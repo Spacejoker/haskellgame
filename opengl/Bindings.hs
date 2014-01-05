@@ -30,7 +30,7 @@ keyPressed :: IORef GameState -> GLFW.KeyCallback
 keyPressed gs win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
 keyPressed gs win GLFW.Key'Enter _ GLFW.KeyState'Pressed _ = do
   gs' <- readIORef gs
-  writeIORef gs $! gs' {mode = Play }
+  writeIORef gs $! gs' {mode = Credits }
 keyPressed gs win GLFW.Key'Up _ GLFW.KeyState'Pressed _ = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = max ((menuChoice gs') - 1) 0}

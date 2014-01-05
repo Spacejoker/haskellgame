@@ -23,6 +23,22 @@ import RenderUtil
 
 display :: IORef GameState -> Graphics -> GLFW.Window  -> IO ()
 display gs gx _  = do
+  gs' <- readIORef gs
+  displayScene (mode gs') gs gx 
+  
+
+displayScene :: GameMode -> IORef GameState -> Graphics -> IO ()
+displayScene Credits gs gx  = do
+
+  glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
+                         .|. gl_DEPTH_BUFFER_BIT
+
+  setup2D
+  drawText (font gx) "Super game by Jens Schwarzenegger" (500, 500) (1,1,0)
+
+  glFlush
+
+displayScene Title gs gx  = do
 
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                          .|. gl_DEPTH_BUFFER_BIT
@@ -48,10 +64,6 @@ display gs gx _  = do
   renderMenu' (font gx) 
                [("New Game", (xBase, 400)),( "Credits", (xBase + 12, 440)), ("  Quit", (xBase, 480))]
                textColor chosenColor 0 (menuChoice gs')
-  --drawText (font gx) "New Game" (xBase, 400) chosenColor
-  --drawText (font gx) "Credits" (xBase + 12, 440) textColor
-  --drawText (font gx) "  Quit  " (xBase, 480) textColor
-
   glFlush
 
 renderMenu' :: Font -> [(String, (GLfloat, GLfloat))]-> (GLfloat, GLfloat, GLfloat) ->
