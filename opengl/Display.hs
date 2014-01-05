@@ -34,7 +34,7 @@ displayScene Credits gs gx  = do
                          .|. gl_DEPTH_BUFFER_BIT
 
   setup2D
-  drawText (font gx) "Super game by Jens Schwarzenegger" (500, 500) (1,1,0)
+  drawText (font gx) "Super game created by Jens Schwarzenegger and friends" (300, 200) (1,1,0)
 
   glFlush
 

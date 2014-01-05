@@ -26,11 +26,16 @@ shutdown win = do
   _ <- exitWith ExitSuccess
   return ()
 
+modeFromInt 0 = Title
+modeFromInt 1 = Credits
+modeFromInt 2 = Title
+
+
 keyPressed :: IORef GameState -> GLFW.KeyCallback 
 keyPressed gs win GLFW.Key'Escape _ GLFW.KeyState'Pressed _ = shutdown win
 keyPressed gs win GLFW.Key'Enter _ GLFW.KeyState'Pressed _ = do
   gs' <- readIORef gs
-  writeIORef gs $! gs' {mode = Credits }
+  writeIORef gs $! gs' { mode = modeFromInt $ menuChoice gs' }
 keyPressed gs win GLFW.Key'Up _ GLFW.KeyState'Pressed _ = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = max ((menuChoice gs') - 1) 0}
