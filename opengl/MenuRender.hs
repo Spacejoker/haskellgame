@@ -1,9 +1,11 @@
 module MenuRender where
 
+--
+--
 --ssimport Graphics.Rendering.OpenGL.GL as GL --(textureBinding, ($=), Texture2D)
+import Graphics.Rendering.FTGL
+--import Graphics.UI.GLUT (renderString, StrokeFont(MonoRoman))
 import qualified Graphics.UI.GLFW as GLFW
--- everything from here starts with gl or GL
-import Graphics.Rendering.OpenGL.Raw
 import Graphics.Rendering.OpenGL.Raw
 import Graphics.Rendering.GLU.Raw ( gluPerspective )
 import Data.Bits ( (.|.) )
@@ -36,6 +38,17 @@ renderMenu iogs gx = do
   cube 1 (Just $ texCube gx)
   --writeIORef angle  $! angle_ + 0.1
   --angle $~! \angle -> (angle + 0.1)
+  glColor3f 1 1 1 
+  --glScalef 0.1 0.1 0.1
+  glTranslatef 0 0 (-5.0) 
+
+  --renderString MonoRoman $ "APBC"
+
+  glLoadIdentity  -- reset view
+  glColor3f 1 1 1 
+  font <- createTextureFont "Font.ttf"
+  setFontFaceSize font 24 72
+  renderFont font "Hello world!" All
 
   glFlush
 

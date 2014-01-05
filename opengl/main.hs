@@ -31,6 +31,8 @@ main = do
   gs <- newIORef $ newGame 
   tex <- initGL win
   let gx = Graphics tex
+  
+  --let f = CreateFont
 
   GLFW.setWindowRefreshCallback win (Just (display gs gx))
 
