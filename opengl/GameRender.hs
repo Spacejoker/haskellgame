@@ -1,9 +1,14 @@
 module GameRender where
 
-import Graphics.UI.GLUT
+import Graphics.Rendering.GLU.Raw ( gluPerspective )
+import Graphics.Rendering.FTGL
+--import Graphics.UI.GLUT
+import qualified Graphics.UI.GLFW as GLFW
+import Graphics.Rendering.OpenGL.Raw
 import Control.Monad
 import System.Random
 import Data.IORef
+import Data.Bits ( (.|.) )
 
 import Cube
 import Model
@@ -11,6 +16,8 @@ import StringUtil
 import GameTick
 import RenderUtil
 import System.Random
+import Data.String.Utils
+
 displayPlay gs gx =do
   glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
                          .|. gl_DEPTH_BUFFER_BIT
@@ -29,18 +36,4 @@ displayPlay gs gx =do
 writeFormat :: String -> String
 writeFormat s = replace " " "_" s
 
-drawStrings :: GameState -> IO()
-drawStrings gs = do
 
-  let sc = (0.01::GLfloat)
-      color' = (Color3 1 1 (0::GLfloat))
-
-  --drawString (targetStr gs) (Vector3 (-100) 250 (-100::GLfloat)) color'
-  --drawString (reverse $ curStr gs) ( Vector3 (-100) 450 (-100::GLfloat) ) color'
-  --drawString (show $ score gs) ( Vector3 (100) 800 (-100::GLfloat) ) color'
-  return ()
-
-renderGame :: IORef GameState -> DisplayCallback
-renderGame iogs = do
-
-  swapBuffers

@@ -15,6 +15,10 @@ getWord = do
   let w = allWords !! rng
   return (w)
 
+ff7Words :: [String]
+ff7Words = [
+            "No. After all, I did work for Shinra, y'know."]
+
 allWords :: [String]
 allWords = ["Heart container",
             "Heart",

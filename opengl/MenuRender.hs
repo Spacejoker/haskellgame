@@ -19,6 +19,7 @@ import Model
 import StringUtil
 import GameTick
 import RenderUtil
+import Graphics.UI.GLUT (get, elapsedTime)
 
 displayTitle gs gx = do
 
