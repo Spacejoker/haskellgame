@@ -1,10 +1,6 @@
 module MenuRender where
 
---
---
---ssimport Graphics.Rendering.OpenGL.GL as GL --(textureBinding, ($=), Texture2D)
 import Graphics.Rendering.FTGL
---import Graphics.UI.GLUT (renderString, StrokeFont(MonoRoman))
 import qualified Graphics.UI.GLFW as GLFW
 import Graphics.Rendering.OpenGL.Raw
 import Graphics.Rendering.GLU.Raw ( gluPerspective )
@@ -24,6 +20,56 @@ import StringUtil
 import GameTick
 import RenderUtil
 
+displayTitle gs gx = do
+
+  glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
+                         .|. gl_DEPTH_BUFFER_BIT
+  setup3D
+
+  glBindTexture gl_TEXTURE_2D (texCube gx)
+ 
+  glRotatef 50 1 0 0
+  glRotatef 25 0 2 0
+  t <- get elapsedTime 
+  let f = (\x -> (x, 2 + sin ((-x)+(fromIntegral t)/200.0)))
+      fsin = map f [-5,-4..5]
+  drawSinCubes fsin (Just $ texCube gx) (fromIntegral t)
+
+  setup2D
+  
+  gs' <- readIORef gs 
+  let mod = sin((fromIntegral t)/200)*0.3
+      textColor = (0.2, 0.2, 0.3)
+      chosenColor = (0.5+mod, 0.5+mod, 0.5+mod)
+      xBase = 570
+  renderTextMenu (font gx) 
+               [("New Game", (xBase, 400)),( "Credits", (xBase + 12, 440)), ("  Quit", (xBase, 480))]
+               textColor chosenColor 0 (menuChoice gs')
+  glFlush
+
+drawSinCubes :: [(GLfloat, GLfloat)] -> Maybe GLuint -> GLfloat -> IO()
+drawSinCubes [] _ t = return ()
+drawSinCubes ((a, b):xs) tex t = do
+  glLoadIdentity  -- reset view
+  glTranslatef a b (-6.0) 
+
+  glRotatef (t*0.2) 1 0 0
+  glRotatef (t*0.08) 0 2 0
+  cube 0.2 tex
+  drawSinCubes xs tex t
+
+renderTextMenu :: Font -> [(String, (GLfloat, GLfloat))]-> (GLfloat, GLfloat, GLfloat) ->
+                (GLfloat, GLfloat, GLfloat) -> Int -> Int -> IO()
+renderTextMenu _ [] _ _ _ _ = return ()
+renderTextMenu fnt ((s, (x, y)):xs)  unchosen chosen cur choice
+  | cur == choice = do
+    drawText fnt s (x, y) chosen
+    renderTextMenu fnt xs unchosen chosen (cur+1) choice
+  | otherwise = do
+    drawText fnt s (x, y) unchosen
+    renderTextMenu fnt xs unchosen chosen (cur+1) choice
+
+-- old
 renderMenu :: IORef GameState -> Graphics -> IO()
 renderMenu iogs gx = do
   putStrLn "Render"
@@ -36,13 +82,8 @@ renderMenu iogs gx = do
   glRotatef 25 0 2 0
 
   cube 1 (Just $ texCube gx)
-  --writeIORef angle  $! angle_ + 0.1
-  --angle $~! \angle -> (angle + 0.1)
   glColor3f 1 1 1 
-  --glScalef 0.1 0.1 0.1
   glTranslatef 0 0 (-5.0) 
-
-  --renderString MonoRoman $ "APBC"
 
   glLoadIdentity  -- reset view
   glColor3f 1 1 1 
@@ -52,4 +93,3 @@ renderMenu iogs gx = do
   renderFont (font gx) "Hello world!" All
 
   glFlush
-

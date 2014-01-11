@@ -10,6 +10,13 @@ screenWidth = 1280
 screenHeight :: GLdouble
 screenHeight = 720
 
+drawText :: Font -> String -> (GLfloat, GLfloat) -> (GLfloat, GLfloat, GLfloat) -> IO()
+drawText fnt s (x, y) (r, g, b) = do
+  glColor3f r g b
+  glRasterPos2f x y
+  setFontFaceSize fnt 24 72
+  renderFont fnt s All
+
 setup3D :: IO()
 setup3D = do
   glEnable gl_TEXTURE_2D
