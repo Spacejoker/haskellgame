@@ -35,10 +35,7 @@ main = do
   tex <- initGL win
   let gx = Graphics tex font
   
-  --let f = CreateFont
-
   GLFW.setWindowRefreshCallback win (Just (display gs gx))
-
   GLFW.setFramebufferSizeCallback win (Just resizeScene)
   GLFW.setKeyCallback win (Just $ keyPressed gs)
   GLFW.setCharCallback win (Just $ textInput gs)

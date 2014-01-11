@@ -27,12 +27,25 @@ displayPlay gs gx =do
   let target = targetStr gs'
       curStr' = curStr gs'
       common = commonStr gs'--commonPrefix curStr' target
+      tex = texCube gx
   t <- get elapsedTime
   drawText (font gx) target (30, 30) (1,1,1)
   drawText (font gx) (writeFormat curStr') (30, 58) (1,0,0)
   drawText (font gx) (writeFormat common) (30, 86) (0,0.8,0)
   drawText (font gx) ("Score: " ++ (show $ score gs')) (30, 116) (0,0.8,0)
   drawText (font gx) ("Time: " ++ (show $ timeLeft gs' t)) (30, 144) (0,0.8,0)
+
+  setup3D
+
+  glBindTexture gl_TEXTURE_2D tex
+
+  glLoadIdentity  -- reset view
+  glTranslatef 0 0 (-6.0) 
+
+  glRotatef (0.2) 1 0 0
+  glRotatef (0.08) 0 2 0
+  cube 0.2 (Just tex)
+
   glFlush
 
 timeLeft :: GameState -> Int -> Int

@@ -18,12 +18,13 @@ makeLogics gs = do
   nextTarget common target gs
   gs'' <- readIORef gs
   t <- get elapsedTime
-  
+
   writeIORef gs $! gs'' { commonStr = common, mode = nextMode gs'' t}
 
 nextMode :: GameState -> Int -> GameMode
 nextMode gs t
   | (t0 gs) + turnLength*1000 - t <= 0 = Title
+  | t0 gs == 0 = Title
   | otherwise = Play
 
 nextTarget :: String -> String -> IORef GameState -> IO()
