@@ -23,7 +23,7 @@ makeLogics gs = do
 
 nextMode :: GameState -> Int -> GameMode
 nextMode gs t
-  | (t0 gs) + turnLength*1000 - t <= 0 = Title
+  | (t0 gs) + turnLength*1000 - t <= 0 = GameOver
   | t0 gs == 0 = Title
   | otherwise = Play
 

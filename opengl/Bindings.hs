@@ -39,6 +39,11 @@ handleEvent gs Credits GLFW.Key'Enter = do
   gs' <- readIORef gs
   writeIORef gs $! gs' { mode = Title }
 
+handleEvent gs GameOver GLFW.Key'Enter = do
+  putStrLn "Enter"
+  gs' <- readIORef gs
+  writeIORef gs $! gs' { mode = Title }
+
 handleEvent gs Play GLFW.Key'Backspace = do
   gs' <- readIORef gs
   writeIORef gs $! gs' { curStr = "" } --Prelude.init $ curStr gs' }

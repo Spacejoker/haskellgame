@@ -44,3 +44,11 @@ displayScene Title gs gx  = do
 displayScene Play gs gx = do
   displayPlay gs gx 
 
+displayScene GameOver gs gx = do
+  
+  glClear $ fromIntegral  $  gl_COLOR_BUFFER_BIT
+                         .|. gl_DEPTH_BUFFER_BIT
+  setup2D
+  drawText (font gx) "Some game over info, enter to continue" (300, 200) (1,1,0)
+
+  glFlush
