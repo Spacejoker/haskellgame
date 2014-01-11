@@ -27,8 +27,11 @@ data GameState = GameState {
   lastUpdate    :: Int,
   enemies       :: [Enemy],
   mode          :: GameMode,
-  menuChoice    :: Int
+  menuChoice    :: Int,
+  t0            :: Int
 }
+
+  
 
 data Graphics = Graphics {
   texCube       :: GLuint,
@@ -36,7 +39,7 @@ data Graphics = Graphics {
 }
 
 newGame :: GameState
-newGame = GameState "Link" "" "" 0 0 enemies Title 0
+newGame = GameState "Link" "" "" 0 0 enemies Title 0 0
   where enemies = [newEnemy]
 
 newEnemy :: Enemy

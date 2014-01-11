@@ -9,6 +9,9 @@ commonPrefix (x:xs) (y:ys)
   | x == y = (x:commonPrefix xs ys)
   | otherwise =  ""
 
+turnLength :: Int
+turnLength = 5
+
 getWord :: IO(String)
 getWord = do
   rng <- getStdRandom (randomR (0,((length allWords)-1::Int)))

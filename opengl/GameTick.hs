@@ -17,14 +17,20 @@ makeLogics gs = do
       common = commonPrefix (curStr gs') target
   nextTarget common target gs
   gs'' <- readIORef gs
-  writeIORef gs $! gs'' { commonStr = common }
+  t <- get elapsedTime
+  
+  writeIORef gs $! gs'' { commonStr = common, mode = nextMode gs'' t}
+
+nextMode :: GameState -> Int -> GameMode
+nextMode gs t
+  | (t0 gs) + turnLength*1000 - t <= 0 = Title
+  | otherwise = Play
 
 nextTarget :: String -> String -> IORef GameState -> IO()
 nextTarget cur target gs
   | (length cur) == (length target) = do
     word' <- getWord
     gs' <- readIORef gs
-    
     writeIORef gs $! gs' { targetStr = word', curStr = "", score = (score gs') + 1 }
   | otherwise = return ()
 

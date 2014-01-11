@@ -26,7 +26,8 @@ keyPressed _  _   _               _ _                     _ = return ()
 handleEvent :: IORef GameState -> GameMode -> GLFW.Key -> IO()
 handleEvent gs Title GLFW.Key'Enter = do
   gs' <- readIORef gs
-  writeIORef gs $! gs' { mode = modeFromInt $ menuChoice gs' }
+  t0' <- get elapsedTime
+  writeIORef gs $! gs' { mode = modeFromInt $ menuChoice gs', t0 = t0' }
 handleEvent gs Title GLFW.Key'Up = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = max ((menuChoice gs') - 1) 0}
@@ -40,7 +41,7 @@ handleEvent gs Credits GLFW.Key'Enter = do
 
 handleEvent gs Play GLFW.Key'Backspace = do
   gs' <- readIORef gs
-  writeIORef gs $! gs' { curStr = Prelude.init $ curStr gs' }
+  writeIORef gs $! gs' { curStr = "" } --Prelude.init $ curStr gs' }
 
 handleEvent _  _       _ = return ()
 
