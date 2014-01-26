@@ -53,7 +53,7 @@ renderEnemies :: [Enemy] -> GLuint -> IO()
 renderEnemies (x:xs) tex = do
   glLoadIdentity
   glTranslatef (fst $ enemyPos x) (snd $ enemyPos x) (-6.0) 
-  putStrLn $ show $ fst $ enemyPos x
+  --putStrLn $ show $ fst $ enemyPos x
   cube 0.2 (Just tex)
   
   renderEnemies xs tex

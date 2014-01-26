@@ -24,13 +24,13 @@ makeLogics gs = do
   t <- get elapsedTime
   let dt = ((fromIntegral ((t0 gs') - t))::GLfloat)
 
-  let enemies' = map (updatePosition dt) (enemies gs')
+  let enemies' = map (updateEnemies dt) (enemies gs'')
 
   writeIORef gs $! gs'' { commonStr = common, mode = nextMode gs'' t, t0 = t, enemies = enemies'}
 
-updatePosition :: GLfloat -> Enemy -> Enemy
-updatePosition dt e = e{enemyPos = (a, b)}
-  where a = (fst $ enemyPos e) - (((speed e)*dt)::GLfloat)
+updateEnemies :: GLfloat -> Enemy -> Enemy
+updateEnemies dt e = e{enemyPos = (a, b)}
+  where a = (fst $ enemyPos e) + (((speed e)*dt)::GLfloat)
         b = snd $ enemyPos e
 
 nextMode :: GameState -> Int -> GameMode
@@ -44,6 +44,10 @@ nextTarget cur target gs
   | (length cur) == (length target) = do
     word' <- getWord
     gs' <- readIORef gs
-    writeIORef gs $! gs' { targetStr = word', curStr = "", score = (score gs') + 1 }
+    let e' = (head $ enemies gs')
+        pos = enemyPos e'
+        pos' = (fst pos + 1, snd pos)
+
+    writeIORef gs $! gs' { targetStr = word', curStr = "", score = (score gs') + 1, enemies = [e'{enemyPos = pos'}] }
   | otherwise = return ()
 

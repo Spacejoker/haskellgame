@@ -46,4 +46,4 @@ newGame time = GameState "Link" "" "" 0 0 enemies Title 0 time 10
   where enemies = [newEnemy time]
 
 newEnemy :: Int -> Enemy
-newEnemy time = Enemy (0,0) 10 10 0.0001 time
+newEnemy time = Enemy (0,0) 10 10 0.0003 time
