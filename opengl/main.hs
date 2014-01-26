@@ -9,7 +9,7 @@ import Data.IORef ( IORef, newIORef, readIORef, writeIORef )
 import Foreign ( withForeignPtr, plusPtr, peek, alloca )
 import qualified Data.ByteString.Internal as BSI
 import Data.Maybe
-import Graphics.UI.GLUT (getArgsAndInitialize)
+import Graphics.UI.GLUT (getArgsAndInitialize, get, elapsedTime)
 
 import Util
 import Model
@@ -30,8 +30,9 @@ main = do
   GLFW.makeContextCurrent (Just win)
 
   font <- createBitmapFont "font.tff"
+  t0 <- get elapsedTime
   putStrLn $ show font
-  gs <- newIORef $ newGame 
+  gs <- newIORef $ (newGame t0)
   tex <- initGL win
   let gx = Graphics tex font
   

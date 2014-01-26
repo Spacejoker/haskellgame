@@ -2,6 +2,7 @@ module Model where
 
 --import Graphics.UI.GLUT as GLUT
 import Graphics.Rendering.OpenGL.Raw
+--import Graphics.UI.GLUT (get, elapsedTime)
 import Graphics.Rendering.FTGL
 --import qualified Graphics.UI.GLFW as GLFW
 
@@ -13,10 +14,11 @@ modeFromInt 1 = Credits
 modeFromInt 2 = Title
 
 data Enemy = Enemy {
-  enemyPos :: (Float, Float),
-  hp       :: Int,
-  maxhp    :: Int,
-  speed    :: Float
+  enemyPos      :: (GLfloat, GLfloat),
+  enemyHp       :: Int,
+  maxhp         :: Int,
+  speed         :: GLfloat,
+  spawnTime     :: Int
 }
 
 data GameState = GameState {
@@ -28,7 +30,8 @@ data GameState = GameState {
   enemies       :: [Enemy],
   mode          :: GameMode,
   menuChoice    :: Int,
-  t0            :: Int
+  t0            :: Int,
+  heroHp        :: Int
 }
 
   
@@ -38,9 +41,9 @@ data Graphics = Graphics {
   font          :: Font
 }
 
-newGame :: GameState
-newGame = GameState "Link" "" "" 0 0 enemies Title 0 0
-  where enemies = [newEnemy]
+newGame :: Int -> GameState
+newGame time = GameState "Link" "" "" 0 0 enemies Title 0 time 10
+  where enemies = [newEnemy time]
 
-newEnemy :: Enemy
-newEnemy = Enemy (-10,0) 10 10 1.0
+newEnemy :: Int -> Enemy
+newEnemy time = Enemy (0,0) 10 10 0.0001 time

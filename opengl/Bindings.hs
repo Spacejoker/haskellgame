@@ -27,10 +27,17 @@ handleEvent :: IORef GameState -> GameMode -> GLFW.Key -> IO()
 handleEvent gs Title GLFW.Key'Enter = do
   gs' <- readIORef gs
   t0' <- get elapsedTime
-  writeIORef gs $! gs' { mode = modeFromInt $ menuChoice gs', t0 = t0' }
+  
+  writeIORef gs $! case (modeFromInt $ menuChoice gs') of {
+    (Play) -> gs' { mode = Play, t0 = t0' };
+    (Credits) -> gs'
+  }
+
+
 handleEvent gs Title GLFW.Key'Up = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = max ((menuChoice gs') - 1) 0}
+
 handleEvent gs Title GLFW.Key'Down = do
   gs' <- readIORef gs
   writeIORef gs $! gs' {menuChoice = min ((menuChoice gs') + 1) 2}
@@ -40,7 +47,6 @@ handleEvent gs Credits GLFW.Key'Enter = do
   writeIORef gs $! gs' { mode = Title }
 
 handleEvent gs GameOver GLFW.Key'Enter = do
-  putStrLn "Enter"
   gs' <- readIORef gs
   writeIORef gs $! gs' { mode = Title }
 
@@ -60,5 +66,6 @@ appendWriting Play c gs = do
   gs' <- readIORef gs
   let curStr' = curStr gs'
   writeIORef gs $! gs' { curStr = curStr' ++ [c] }
+
 appendWriting _ _ _ = return ()
 
